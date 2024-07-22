@@ -1,0 +1,10 @@
+^XA
+^FO53,28^A0,N,33^FR^FD@IdBienSeq@^FS
+^FO53,155^A0,N,33^FR^FD@IdBien@^FS
+^FO53,235^A0,N,33^FR^FD@idSociete@^FS
+^FO53,315^A0,N,33^FR^FD@idEmploye@^FS
+^FO53,395^A0,N,33^FR^FD@codeAmortissement@^FS
+^FO53,475^A0,N,33^FR^FD@datecession@^FS
+^FO554,342^BY3,,128^BCN,128,Y,N,N^FD@datederniereaffectation@^FS
+^FO408,51^A0,N,33^FDEUREQUAT^FS
+^XZ
