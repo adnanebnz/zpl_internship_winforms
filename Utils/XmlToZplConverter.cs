@@ -105,7 +105,7 @@ namespace XmlToZpl.Utils
                             case "QRCode":
                                 if (code != "")
                                 {
-                                    zplRes += $"^FO{x},{y}^BQ{orientation},1,{height}^FDQA,{code}^FS\n";
+                                    zplRes += $"^FO{x},{y}^BQ{orientation},3,{height}^FDQA,{code}^FS\n";
                                 }
                                 else
                                 {
