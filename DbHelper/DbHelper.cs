@@ -42,7 +42,6 @@ namespace XmlToZpl.DbHelper
 
             try
             { 
-
             using (SqlConnection connection = GetConnection())
             {
                 OpenConnection(connection);
@@ -78,7 +77,7 @@ namespace XmlToZpl.DbHelper
         public List<Bien> FetchBienDataFromDb()
         {
             List<Bien> biens = new List<Bien>();
-            //INTERFACE AND IMPLEMENTATION OF 2 METHODS XMLTOZPL(cheminXml,zplOutputFilePath) AND PRINTLABEL(dictionarry or json as data, cheminZpl)
+            //TODO INTERFACE AND IMPLEMENTATION OF 2 METHODS XMLTOZPL(cheminXml,zplOutputFilePath) AND PRINTLABEL(dictionarry or json as data, cheminZpl)
             try
             {
                 using (SqlConnection connection = GetConnection())
@@ -137,10 +136,9 @@ namespace XmlToZpl.DbHelper
             catch (Exception e)
             {
                 Console.WriteLine("Error fetching Bien data: " + e.Message);
-                throw; // Rethrow the exception to handle it appropriately at the higher level
+                biens.Clear();
+                return biens;
             }
         }
-
-
     }
 }

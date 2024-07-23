@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 
 namespace XmlToZpl.Utils
@@ -8,7 +9,16 @@ namespace XmlToZpl.Utils
         private const int Dpi = 203;
         public static int ConvertDimension(string dimensionValue)
         {
-            return (int)(double.TryParse(dimensionValue, NumberStyles.Any, CultureInfo.InvariantCulture, out double val) ? val * CmToInch * Dpi : 0);
+            try
+            {
+                return (int)(double.TryParse(dimensionValue, NumberStyles.Any, CultureInfo.InvariantCulture, out double val) ? val * CmToInch * Dpi : 0);
+
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return 0;
+            }
         }
     }
 }

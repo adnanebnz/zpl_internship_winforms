@@ -33,7 +33,8 @@ namespace XmlToZpl
         }
         public void formLoad()
         {
-            try {
+            try
+            {
                 List<Bien> biens = dbHelper.FetchBienDataFromDb();
                 foreach (var item in biens)
                 {
@@ -41,7 +42,9 @@ namespace XmlToZpl
                 }
                 dataGridView1.AllowUserToAddRows = false;
                 dataGridView1.SelectionChanged += DataGridView1_SelectionChanged;
-            } catch(Exception e) {
+            }
+            catch (Exception e)
+            {
                 Console.WriteLine(e.Message);
             }
         }
@@ -49,7 +52,7 @@ namespace XmlToZpl
         {
             listeBiensAImprimer.Clear();
 
-           
+
             foreach (DataGridViewRow row in dataGridView1.SelectedRows)
             {
                 Bien bien = row.DataBoundItem as Bien;
@@ -59,7 +62,8 @@ namespace XmlToZpl
                 }
             }
         }
-        private void button1_Click(object sender, EventArgs e) {
+        private void button1_Click(object sender, EventArgs e)
+        {
             if (openFileDialog2.ShowDialog() == DialogResult.OK)
             {
                 string fileNamePath = openFileDialog2.FileName;
@@ -83,25 +87,21 @@ namespace XmlToZpl
                     richTextBox2.Clear();
                     button2.Enabled = false;
                 }
-                
+
             }
         }
         private void button2_Click(object sender, EventArgs e)
         {
             if (listeBiensAImprimer.Count > 0)
             {
-                Console.WriteLine(listeBiensAImprimer.Count);
                 string resJson = JsonConvert.SerializeObject(listeBiensAImprimer);
 
                 replacementsList = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(resJson);
-
-            }
-            if (replacementsList != null)
-            {
-                foreach (var replacements in replacementsList)
+                foreach (var item in replacementsList)
                 {
-                    Console.WriteLine(replacements);
-                    ZplTemplateProcessor.ProcessTemplate(zplFilePath, replacements);
+                    Console.WriteLine(item.Keys);
+                    Console.WriteLine(item.Values);
+
                 }
             }
 
@@ -109,8 +109,10 @@ namespace XmlToZpl
             //TODO SEE WHY ITS NOT PRINTING ACCORDING TO THE NUMBER OF DATA
             if (result == DialogResult.OK)
             {
-                // Send ZPL file to selected printer
-                RawPrinterHelper.SendFileToPrinter(printDialog1.PrinterSettings.PrinterName, zplFilePath);
+                if (replacementsList != null)
+                {
+                    ZplTemplateProcessor.ProcessAndPrintZplFile(zplFilePath, replacementsList);
+                }
             }
 
         }

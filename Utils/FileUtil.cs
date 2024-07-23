@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace XmlToZpl.Utils
@@ -7,22 +8,40 @@ namespace XmlToZpl.Utils
 
         public static string ReadFile(string filePath)
         {
-            string result;
-            using (StreamReader reader = new StreamReader(filePath))
+            string result = "";
+            try
             {
-                result = reader.ReadToEnd();
-                
-                reader.Close();
+                using (StreamReader reader = new StreamReader(filePath))
+                {
+                    result = reader.ReadToEnd();
+
+                    reader.Close();
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
             return result;
+
         }
 
-        public static void WriteInFile(string filePath, string content)
+        public static bool WriteInFile(string filePath, string content)
         {
-            using (StreamWriter writer = new StreamWriter(filePath, false))
+            try
             {
-                writer.Write(content);
-                writer.Close();
+                using (StreamWriter writer = new StreamWriter(filePath, false))
+                {
+                    writer.Write(content);
+                    writer.Close();
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
             }
         }
     }

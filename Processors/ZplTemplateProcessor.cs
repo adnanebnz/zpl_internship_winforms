@@ -6,20 +6,10 @@ namespace XmlToZpl.Processors
 {
     public static class ZplTemplateProcessor
     {
-        public static void ProcessTemplate(string templateZplFile, Dictionary<string, string> variables)
-        {
-                string template = FileUtil.ReadFile(templateZplFile);
-
-                foreach (var variable in variables)
-                {
-                    template = template?.Replace($"@{variable.Key}@", variable.Value);
-                }
-                FileUtil.WriteInFile("./dynamicZpl.zpl", template);
-            }
-        public static void ProcessTemplate2(string templateZplFile, List<Dictionary<string, string>> variables)
+        public static void ProcessAndPrintZplFile(string templateZplFilePath, List<Dictionary<string, string>> variables)
         {
             //TODO CRAETE A MODEL TO ADD QUANTITY
-            string template = FileUtil.ReadFile(templateZplFile);
+            string template = FileUtil.ReadFile(templateZplFilePath);
             if (!String.IsNullOrEmpty(template))
             {
                 foreach (var item in variables)

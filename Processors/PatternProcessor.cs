@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 
 namespace XmlToZpl.Processors
@@ -38,12 +39,21 @@ namespace XmlToZpl.Processors
 
         public static string DecodeString(string encodedString)
         {
-            var patterns = GetEncodedPatterns();
-            foreach (var pattern in patterns)
+            try
             {
-                encodedString = encodedString.Replace(pattern.Key, pattern.Value);
+                var patterns = GetEncodedPatterns();
+                foreach (var pattern in patterns)
+                {
+                    encodedString = encodedString.Replace(pattern.Key, pattern.Value);
+                }
+                return encodedString;
             }
-            return encodedString;
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return "";
+            }
+           
         }
 
         public static string RotateCode(string rotationAngle)

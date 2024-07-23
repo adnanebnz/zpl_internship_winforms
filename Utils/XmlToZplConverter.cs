@@ -98,18 +98,18 @@ namespace XmlToZpl.Utils
 
                         // ROTATION OF THE CODE
                         string orientation = PatternProcessor.RotateCode(orientationAngle);
-
-
+                        //TODO FIX THIS
                         switch (symbology)
                         {
                             case "QRCode":
                                 if (code != "")
                                 {
-                                    zplRes += $"^FO{x},{y}^BQ{orientation},3,{height}^FDQA,{code}^FS\n";
+                                    zplRes += $"^FO{x},{y}^BQ{orientation},,3^FDQA,{code}^FS\n";
                                 }
                                 else
                                 {
-                                    zplRes += $"^FO{x},{y}^BQ{orientation},1,{height}^FDQA,@{name}@^FS\n";
+                                    zplRes += $"^FO{x},{y}^BQ{orientation},,3^FDQA,@{name}@^FS\n";
+                                    ;
                                 }
                                 break;
                             case "Code128":
@@ -125,11 +125,11 @@ namespace XmlToZpl.Utils
                             case "Codabar":
                                 if (code != "")
                                 {
-                                    zplRes += $"^FO{x},{y}^BY3,,{height}^B3{orientation},N,{height},Y,N^FD{code}^FS\n";
+                                    zplRes += $"^FO{x},{y}^BY3,,{height}^BK{orientation},N,{height},Y,N^FD{code}^FS\n";
                                 }
                                 else
                                 {
-                                    zplRes += $"^FO{x},{y}^BY3,,{height}^B3{orientation},N,{height},Y,N^FD@{name}@^FS\n";
+                                    zplRes += $"^FO{x},{y}^BY3,,{height}^BK{orientation},N,{height},Y,N^FD@{name}@^FS\n";
                                 }
                                 break;
                             case "Code11":
