@@ -36,6 +36,7 @@ namespace XmlToZpl
             button4.Visible = false;
             textBox2.Visible = false;
             instance = this;
+            textBox1.Text = "bien";
             dbHelper = new DatabaseHelper(connectionString);
         }
 
@@ -85,6 +86,10 @@ namespace XmlToZpl
                 textBox2.Text = imageFilePath;
                 if (!File.Exists(imageFilePath)) {
                     label2.Visible = true;
+                }
+                else
+                {
+                    pictureBox1.Load(imageFilePath);
                 }
             }
             //TODO MAKE CONVERT BUTTON
@@ -172,6 +177,7 @@ namespace XmlToZpl
                 textBox2.Text = newImageFilePath;
                 label2.Visible = false;
                 XmlToZplConverter.ModifyImagePath(this.xmlFilePath, newImageFilePath);
+                pictureBox1.Load(newImageFilePath);
                 this.zplResult = XmlToZplConverter.ConvertDynamicXmlToZpl(this.xmlFilePath);
                 Console.WriteLine(zplResult);
             }
@@ -190,6 +196,11 @@ namespace XmlToZpl
                     comboBox.Items.Add(value);
                 }
             }
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

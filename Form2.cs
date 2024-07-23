@@ -4,8 +4,10 @@ using System.IO;
 using System.Windows.Forms;
 using XmlToZpl.Processors;
 using Newtonsoft.Json;
+using XmlToZpl.DbHelper;
 
 using XmlToZpl.Utils;
+using XmlToZpl.Models;
 
 namespace XmlToZpl
 {
@@ -14,12 +16,49 @@ namespace XmlToZpl
         private string zplFilePath;
         private string jsonFilePath;
         private string zplResult;
+        private DatabaseHelper dbHelper;
+        private string connectionString = "server=localhost\\SQLEXPRESS;database=Inventaire BDD;Trusted_Connection=True;";
+        private List<Bien> listeBiensAImprimer = new List<Bien>();
+        private List<Dictionary<string, string>> replacementsList = new List<Dictionary<string, string>>();
         public Form2()
         {
             InitializeComponent();
             button2.Enabled = false;
+            dbHelper = new DatabaseHelper(connectionString);
         }
 
+        private void Form2_Load(object sender, EventArgs e)
+        {
+            formLoad();
+        }
+        public void formLoad()
+        {
+            try {
+                List<Bien> biens = dbHelper.FetchBienDataFromDb();
+                foreach (var item in biens)
+                {
+                    bienBindingSource.Add(item);
+                }
+                dataGridView1.AllowUserToAddRows = false;
+                dataGridView1.SelectionChanged += DataGridView1_SelectionChanged;
+            } catch(Exception e) {
+                Console.WriteLine(e.Message);
+            }
+        }
+        private void DataGridView1_SelectionChanged(object sender, EventArgs e)
+        {
+            listeBiensAImprimer.Clear();
+
+           
+            foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+            {
+                Bien bien = row.DataBoundItem as Bien;
+                if (bien != null)
+                {
+                    listeBiensAImprimer.Add(bien);
+                }
+            }
+        }
         private void button1_Click(object sender, EventArgs e) {
             if (openFileDialog2.ShowDialog() == DialogResult.OK)
             {
@@ -33,6 +72,10 @@ namespace XmlToZpl
                 {
                     richTextBox2.Text = jsonFilePath;
                     button2.Enabled = true;
+
+                    string jsonString = FileUtil.ReadFile(jsonFilePath);
+
+                    replacementsList = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(jsonString);
                 }
                 else
                 {
@@ -40,26 +83,30 @@ namespace XmlToZpl
                     richTextBox2.Clear();
                     button2.Enabled = false;
                 }
+                
             }
         }
         private void button2_Click(object sender, EventArgs e)
         {
+            if (listeBiensAImprimer.Count > 0)
+            {
+                Console.WriteLine(listeBiensAImprimer.Count);
+                string resJson = JsonConvert.SerializeObject(listeBiensAImprimer);
 
-            string jsonString = FileUtil.ReadFile(jsonFilePath);
+                replacementsList = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(resJson);
 
-            List<Dictionary<string, string>> replacementsList =
-             JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(jsonString);
-
+            }
             if (replacementsList != null)
             {
                 foreach (var replacements in replacementsList)
                 {
+                    Console.WriteLine(replacements);
                     ZplTemplateProcessor.ProcessTemplate(zplFilePath, replacements);
                 }
             }
 
             DialogResult result = printDialog1.ShowDialog();
-
+            //TODO SEE WHY ITS NOT PRINTING ACCORDING TO THE NUMBER OF DATA
             if (result == DialogResult.OK)
             {
                 // Send ZPL file to selected printer

@@ -46,11 +46,13 @@
             this.button4 = new System.Windows.Forms.Button();
             this.openFileDialog3 = new System.Windows.Forms.OpenFileDialog();
             this.label2 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(305, 461);
+            this.button2.Location = new System.Drawing.Point(305, 529);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(184, 44);
             this.button2.TabIndex = 1;
@@ -96,7 +98,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(432, 168);
+            this.label5.Location = new System.Drawing.Point(420, 168);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(80, 13);
             this.label5.TabIndex = 14;
@@ -118,12 +120,12 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(235, 189);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(235, 197);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(337, 194);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(337, 203);
             this.tableLayoutPanel1.TabIndex = 18;
             // 
             // label1
@@ -133,7 +135,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(270, 273);
+            this.label1.Location = new System.Drawing.Point(270, 292);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(267, 24);
             this.label1.TabIndex = 19;
@@ -141,7 +143,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(665, 461);
+            this.button1.Location = new System.Drawing.Point(665, 529);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(123, 44);
             this.button1.TabIndex = 20;
@@ -177,14 +179,14 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(322, 412);
+            this.textBox2.Location = new System.Drawing.Point(241, 448);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(250, 20);
             this.textBox2.TabIndex = 26;
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(221, 411);
+            this.button4.Location = new System.Drawing.Point(140, 447);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(95, 23);
             this.button4.TabIndex = 27;
@@ -200,17 +202,28 @@
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.Red;
-            this.label2.Location = new System.Drawing.Point(396, 393);
+            this.label2.Location = new System.Drawing.Point(315, 429);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(93, 13);
             this.label2.TabIndex = 28;
             this.label2.Text = "Image non trouvé!";
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Location = new System.Drawing.Point(506, 416);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(88, 83);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox1.TabIndex = 29;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 514);
+            this.ClientSize = new System.Drawing.Size(800, 585);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.textBox2);
@@ -228,6 +241,7 @@
             this.Controls.Add(this.button2);
             this.Name = "Form1";
             this.Text = "Zpl Converter";
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -252,6 +266,7 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.OpenFileDialog openFileDialog3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 
