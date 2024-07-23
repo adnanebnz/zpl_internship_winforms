@@ -10,6 +10,14 @@ namespace XmlToZpl.Utils
 {
     public class XmlToZplConverter
     {
+        /// <summary>
+        /// Converts XML data to ZPL (Zebra Programming Language) format for printing on Zebra printers.
+        /// The method processes XML elements representing different items (e.g., text, barcodes, images)
+        /// and generates corresponding ZPL commands.
+        /// </summary>
+        /// <param name="xmlFilePath">The path to the XML file containing the data to be converted.</param>
+        /// <returns>A string containing the generated ZPL commands.</returns>
+
         public static string ConvertDynamicXmlToZpl(string xmlFilePath)
         {
             var xml = XDocument.Load(xmlFilePath);
@@ -98,7 +106,6 @@ namespace XmlToZpl.Utils
 
                         // ROTATION OF THE CODE
                         string orientation = PatternProcessor.RotateCode(orientationAngle);
-                        //TODO FIX THIS
                         switch (symbology)
                         {
                             case "QRCode":
@@ -169,7 +176,7 @@ namespace XmlToZpl.Utils
                             originalImage = ImageUtil.ConvertToMonochrome(originalImage);
 
                             // Resize the image
-                            Bitmap resizedImage = new Bitmap(originalImage, width,height);
+                            Bitmap resizedImage = new Bitmap(originalImage, width, height);
 
                             // Convert resized image to binary data
                             string binaryData = "";
@@ -261,7 +268,13 @@ namespace XmlToZpl.Utils
                 return null;
             }
         }
-
+        /// <summary>
+        /// Modifies the image path based on specific criteria or conditions.
+        /// This method is typically used to adjust the file path of an image before it is processed or displayed,
+        /// ensuring the path meets certain requirements or conforms to a specific format.
+        /// </summary>
+        /// <param name="originalPath">The original file path of the image.</param>
+        /// <returns>The modified image path that meets the specified criteria or conditions.</returns>
         public static void ModifyImagePath(string xmlFilePath, string newImagePath)
         {
             try

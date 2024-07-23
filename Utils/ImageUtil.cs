@@ -94,7 +94,7 @@ namespace XmlToZpl.Utils
                 Console.WriteLine(ex.Message);
                 return originalImage;
             }
-           
+
         }
 
     }

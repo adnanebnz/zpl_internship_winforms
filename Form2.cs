@@ -17,7 +17,7 @@ namespace XmlToZpl
         private string jsonFilePath;
         private string zplResult;
         private DatabaseHelper dbHelper;
-        private string connectionString = "server=localhost\\SQLEXPRESS;database=Inventaire BDD;Trusted_Connection=True;";
+        private string connectionString = "server=localhost;database=Inventaire BDD;Trusted_Connection=True;";
         private List<Bien> listeBiensAImprimer = new List<Bien>();
         private List<Dictionary<string, string>> replacementsList = new List<Dictionary<string, string>>();
         public Form2()
@@ -62,6 +62,7 @@ namespace XmlToZpl
                 }
             }
         }
+        // SELECT JSON FILE BUTTON
         private void button1_Click(object sender, EventArgs e)
         {
             if (openFileDialog2.ShowDialog() == DialogResult.OK)
@@ -90,6 +91,7 @@ namespace XmlToZpl
 
             }
         }
+        // PRINT BUTTON
         private void button2_Click(object sender, EventArgs e)
         {
             if (listeBiensAImprimer.Count > 0)
@@ -97,16 +99,9 @@ namespace XmlToZpl
                 string resJson = JsonConvert.SerializeObject(listeBiensAImprimer);
 
                 replacementsList = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(resJson);
-                foreach (var item in replacementsList)
-                {
-                    Console.WriteLine(item.Keys);
-                    Console.WriteLine(item.Values);
-
-                }
             }
 
             DialogResult result = printDialog1.ShowDialog();
-            //TODO SEE WHY ITS NOT PRINTING ACCORDING TO THE NUMBER OF DATA
             if (result == DialogResult.OK)
             {
                 if (replacementsList != null)
@@ -116,7 +111,7 @@ namespace XmlToZpl
             }
 
         }
-
+        // SELECT ZPL FILE BUTTON
         private void button3_Click(object sender, EventArgs e)
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)

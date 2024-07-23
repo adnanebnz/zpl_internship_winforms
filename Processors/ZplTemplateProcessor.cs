@@ -19,7 +19,7 @@ namespace XmlToZpl.Processors
                         template = template?.Replace($"@{variable.Key}@", variable.Value);
                     }
                     FileUtil.WriteInFile("./dynamicZpl.zpl", template);
-                    //temporarryfile
+                    //todo temporarryfile
                     //todo add method to not overwrite file
                 }
             }

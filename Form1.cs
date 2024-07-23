@@ -21,9 +21,9 @@ namespace XmlToZpl
         public string zplResult;
         private string newImageFilePath;
         private DatabaseHelper dbHelper;
-        private string connectionString = "server=localhost\\SQLEXPRESS;database=Inventaire BDD;Trusted_Connection=True;";
+        private string connectionString = "server=localhost;database=Inventaire BDD;Trusted_Connection=True;";
 
-        private List<string> bddValues = new List<string>  { };
+        private List<string> bddValues = new List<string> { };
 
         public Form1()
         {
@@ -62,7 +62,7 @@ namespace XmlToZpl
                 }
             }
 
-            
+
             string result = ZplTemplateProcessor.MapTemplate(this.zplResult, this.mappingDictionary);
             Console.WriteLine(result);
             FileUtil.WriteInFile("./dynamicZpl.zpl", result);
@@ -84,7 +84,8 @@ namespace XmlToZpl
                 textBox2.Visible = true;
                 string imageFilePath = XmlToZplConverter.zplImagePath(fileNamePath);
                 textBox2.Text = imageFilePath;
-                if (!File.Exists(imageFilePath)) {
+                if (!File.Exists(imageFilePath))
+                {
                     label2.Visible = true;
                 }
                 else
@@ -92,7 +93,6 @@ namespace XmlToZpl
                     pictureBox1.Load(imageFilePath);
                 }
             }
-            //TODO MAKE CONVERT BUTTON
             this.zplResult = XmlToZplConverter.ConvertDynamicXmlToZpl(this.xmlFilePath);
 
             Console.WriteLine(zplResult);

@@ -41,35 +41,35 @@ namespace XmlToZpl.DbHelper
             List<string> columnNames = new List<string>();
 
             try
-            { 
-            using (SqlConnection connection = GetConnection())
             {
-                OpenConnection(connection);
-
-                SqlCommand command = connection.CreateCommand();
-                command.CommandType = CommandType.Text;
-                string f = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + tableName + "'";
-                command.CommandText = f;
-
-
-                using (SqlDataReader reader = command.ExecuteReader())
+                using (SqlConnection connection = GetConnection())
                 {
-                    while (reader.Read())
+                    OpenConnection(connection);
+
+                    SqlCommand command = connection.CreateCommand();
+                    command.CommandType = CommandType.Text;
+                    string f = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + tableName + "'";
+                    command.CommandText = f;
+
+
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        string columnName = reader.GetString(0);
-                        columnNames.Add(columnName);
+                        while (reader.Read())
+                        {
+                            string columnName = reader.GetString(0);
+                            columnNames.Add(columnName);
+                        }
                     }
+
+                    CloseConnection(connection);
                 }
 
-                CloseConnection(connection);
+                return columnNames;
             }
-
-            return columnNames;
-            }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e);
-                 columnNames.Clear();
+                columnNames.Clear();
             }
             return columnNames;
         }

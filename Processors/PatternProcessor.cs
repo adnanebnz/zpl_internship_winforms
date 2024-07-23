@@ -53,7 +53,7 @@ namespace XmlToZpl.Processors
                 Console.WriteLine(ex.Message);
                 return "";
             }
-           
+
         }
 
         public static string RotateCode(string rotationAngle)
