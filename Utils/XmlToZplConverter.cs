@@ -8,6 +8,9 @@ using System.Xml;
 
 namespace XmlToZpl.Utils
 {
+    /// <summary>
+    /// Converts XML documents to ZPL format.
+    /// </summary>
     public class XmlToZplConverter
     {
         /// <summary>
