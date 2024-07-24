@@ -42,6 +42,7 @@ namespace XmlToZpl
                 }
                 dataGridView1.AllowUserToAddRows = false;
                 dataGridView1.SelectionChanged += DataGridView1_SelectionChanged;
+                dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             }
             catch (Exception e)
             {

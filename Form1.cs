@@ -32,11 +32,13 @@ namespace XmlToZpl
             label5.Visible = false;
             button2.Enabled = false;
             label2.Visible = false;
-            button5.Visible = false;
             button4.Visible = false;
             textBox2.Visible = false;
             instance = this;
             textBox1.Text = "bien";
+            textBox1.Visible = false;
+            button5.Visible = false;
+            label3.Visible = false;
             dbHelper = new DatabaseHelper(connectionString);
         }
 
@@ -72,81 +74,92 @@ namespace XmlToZpl
         // LOAD XML BUTTON
         private void button3_Click(object sender, EventArgs e)
         {
-            getColumnFromBDD();
-            openFileDialog1.ShowDialog();
-
-            string fileNamePath = openFileDialog1.FileName;
-            richTextBox1.Text = fileNamePath;
-            this.xmlFilePath = fileNamePath;
-            if (XmlToZplConverter.CheckIfXmlHasImage(fileNamePath))
+            
+           if( openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                button4.Visible = true;
-                textBox2.Visible = true;
-                string imageFilePath = XmlToZplConverter.zplImagePath(fileNamePath);
-                textBox2.Text = imageFilePath;
-                if (!File.Exists(imageFilePath))
+                if(Path.GetExtension(openFileDialog1.FileName).ToLower() == ".xml") { 
+                string fileNamePath = openFileDialog1.FileName;
+                richTextBox1.Text = fileNamePath;
+                this.xmlFilePath = fileNamePath;
+                textBox1.Visible = true;
+                label3.Visible = true;
+                getColumnFromBDD();
+                    if (XmlToZplConverter.CheckIfXmlHasImage(fileNamePath))
                 {
-                    label2.Visible = true;
+                    button4.Visible = true;
+                    textBox2.Visible = true;
+                    string imageFilePath = XmlToZplConverter.zplImagePath(fileNamePath);
+                    textBox2.Text = imageFilePath;
+                    if (!File.Exists(imageFilePath))
+                    {
+                        label2.Visible = true;
+                    }
+                    else
+                    {
+                        pictureBox1.Load(imageFilePath);
+                    }
                 }
+                this.zplResult = XmlToZplConverter.ConvertDynamicXmlToZpl(this.xmlFilePath);
+
+                Console.WriteLine(zplResult);
+
+                string pattern = @"@([^@]+)@";
+                int labelTop = 20;
+
+                label4.Visible = true;
+                label5.Visible = true;
+                button2.Enabled = true;
+                label1.Visible = false;
+                label3.Visible = true;
+                textBox1.Visible = true;
+                button5.Visible = true;
+
+                MatchCollection matches = Regex.Matches(zplResult, pattern);
+
+                tableLayoutPanel1.Controls.Clear();
+
+                int rowCount = 0;
+
+                foreach (Match match in matches)
+                {
+                    string variableName = match.Groups[1].Value;
+
+                    Label newLabel = new Label
+                    {
+                        Text = variableName,
+                        AutoSize = true
+                    };
+
+                    ComboBox comboBox = new ComboBox
+                    {
+                        Tag = variableName,
+                        DropDownStyle = ComboBoxStyle.DropDownList
+                    };
+
+                    foreach (var value in bddValues)
+                    {
+                        comboBox.Items.Add(value);
+                    }
+                    comboBoxes.Add(comboBox);
+                    tableLayoutPanel1.RowCount = rowCount + 1;
+                    tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+
+                    tableLayoutPanel1.Controls.Add(newLabel, 0, rowCount);
+                    tableLayoutPanel1.Controls.Add(comboBox, 1, rowCount);
+
+                    tableLayoutPanel1.SetCellPosition(newLabel, new TableLayoutPanelCellPosition(0, rowCount));
+                    tableLayoutPanel1.SetCellPosition(comboBox, new TableLayoutPanelCellPosition(1, rowCount));
+
+                    labelTop += 30;
+                    rowCount++;
+                }
+            }
                 else
                 {
-                    pictureBox1.Load(imageFilePath);
+                    MessageBox.Show("Veuillez insérer un fichier XML Valide");
                 }
             }
-            this.zplResult = XmlToZplConverter.ConvertDynamicXmlToZpl(this.xmlFilePath);
 
-            Console.WriteLine(zplResult);
-
-            string pattern = @"@([^@]+)@";
-            int labelTop = 20;
-
-            label4.Visible = true;
-            label5.Visible = true;
-            button2.Enabled = true;
-            label1.Visible = false;
-            label3.Visible = true;
-            textBox1.Visible = true;
-            button5.Visible = true;
-
-            MatchCollection matches = Regex.Matches(zplResult, pattern);
-
-            tableLayoutPanel1.Controls.Clear();
-
-            int rowCount = 0;
-
-            foreach (Match match in matches)
-            {
-                string variableName = match.Groups[1].Value;
-
-                Label newLabel = new Label
-                {
-                    Text = variableName,
-                    AutoSize = true
-                };
-
-                ComboBox comboBox = new ComboBox
-                {
-                    Tag = variableName,
-                    DropDownStyle = ComboBoxStyle.DropDownList
-                };
-
-                foreach (var value in bddValues)
-                {
-                    comboBox.Items.Add(value);
-                }
-                comboBoxes.Add(comboBox);
-                tableLayoutPanel1.RowCount = rowCount + 1;
-                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-
-                tableLayoutPanel1.Controls.Add(newLabel, 0, rowCount);
-                tableLayoutPanel1.Controls.Add(comboBox, 1, rowCount);
-
-                tableLayoutPanel1.SetCellPosition(newLabel, new TableLayoutPanelCellPosition(0, rowCount));
-                tableLayoutPanel1.SetCellPosition(comboBox, new TableLayoutPanelCellPosition(1, rowCount));
-
-                labelTop += 30;
-                rowCount++;
-            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -196,11 +209,6 @@ namespace XmlToZpl
                     comboBox.Items.Add(value);
                 }
             }
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }
