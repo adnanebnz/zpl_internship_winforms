@@ -17,7 +17,7 @@ namespace XmlToZpl
         private string jsonFilePath;
         private string zplResult;
         private DatabaseHelper dbHelper;
-        private string connectionString = "server=localhost;database=Inventaire BDD;Trusted_Connection=True;";
+        private string connectionString = "server=localhost\\SQLEXPRESS;database=Inventaire BDD;Trusted_Connection=True;";
         private List<Bien> listeBiensAImprimer = new List<Bien>();
         private List<Dictionary<string, string>> replacementsList = new List<Dictionary<string, string>>();
         public Form2()
@@ -106,7 +106,7 @@ namespace XmlToZpl
             {
                 if (replacementsList != null)
                 {
-                    ZplTemplateProcessor.ProcessAndPrintZplFile(zplFilePath, replacementsList);
+                    ZplTemplateProcessor.ProcessAndPrintZplFile(zplFilePath, replacementsList, printDialog1.PrinterSettings.PrinterName);
                 }
             }
 

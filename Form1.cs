@@ -21,7 +21,7 @@ namespace XmlToZpl
         public string zplResult;
         private string newImageFilePath;
         private DatabaseHelper dbHelper;
-        private string connectionString = "server=localhost;database=Inventaire BDD;Trusted_Connection=True;";
+        private string connectionString = "server=localhost\\SQLEXPRESS;database=Inventaire BDD;Trusted_Connection=True;";
 
         private List<string> bddValues = new List<string> { };
 

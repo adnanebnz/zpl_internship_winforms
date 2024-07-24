@@ -8,11 +8,11 @@ namespace XmlToZpl.Implementations
     //TODO SEE HOW TO USE THIS
     public class ZplPrinterInterfaceImpl : ZplPrinterInterface
     {
-        public bool PrintLabel(string zplFilePath, List<Dictionary<string, string>> data)
+        public bool PrintLabel(string zplFilePath, List<Dictionary<string, string>> data,string printerName)
         {
             try
             {
-                ZplTemplateProcessor.ProcessAndPrintZplFile(zplFilePath, data);
+                ZplTemplateProcessor.ProcessAndPrintZplFile(zplFilePath, data, printerName);
                 return true;
             }
             catch (Exception ex)

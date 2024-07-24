@@ -23,7 +23,16 @@ namespace XmlToZpl.Utils
 
         public static string ConvertDynamicXmlToZpl(string xmlFilePath)
         {
-            var xml = XDocument.Load(xmlFilePath);
+            string xmlContent = FileUtil.ReadFile(xmlFilePath);
+            XDocument xml;
+            if (!String.IsNullOrEmpty(xmlContent))
+            {
+                 xml = XDocument.Parse(xmlContent);
+            }
+            else
+            {
+                return "";
+            }
 
             string zplRes = "^XA\n";
 
@@ -114,11 +123,11 @@ namespace XmlToZpl.Utils
                             case "QRCode":
                                 if (code != "")
                                 {
-                                    zplRes += $"^FO{x},{y}^BQ{orientation},,3^FDQA,{code}^FS\n";
+                                    zplRes += $"^FO{x},{y}^BQ{orientation},,6^FDQA,{code}^FS\n";
                                 }
                                 else
                                 {
-                                    zplRes += $"^FO{x},{y}^BQ{orientation},,3^FDQA,@{name}@^FS\n";
+                                    zplRes += $"^FO{x},{y}^BQ{orientation},,6^FDQA,@{name}@^FS\n";
                                     ;
                                 }
                                 break;
@@ -220,7 +229,7 @@ namespace XmlToZpl.Utils
             return zplRes;
 
         }
-        private byte[] textToByte(String text)
+        public static byte[] TextToByte(String text)
         {
             return Encoding.UTF8.GetBytes(text);
         }

@@ -65,6 +65,7 @@
     <Compile Include="Implementations\ZplPrinterInterfaceImpl.cs" />
     <Compile Include="Interfaces\ZplPrinterInterface.cs" />
     <Compile Include="Models\Bien.cs" />
+    <Compile Include="Models\PrintingModel.cs" />
     <Compile Include="PrinterHelper\RawPrinterHelper.cs" />
     <Compile Include="Processors\PatternProcessor.cs" />
     <Compile Include="Processors\ZplTemplateProcessor.cs" />

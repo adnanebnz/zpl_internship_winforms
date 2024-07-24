@@ -6,19 +6,24 @@ namespace XmlToZpl.Processors
 {
     public static class ZplTemplateProcessor
     {
-        public static void ProcessAndPrintZplFile(string templateZplFilePath, List<Dictionary<string, string>> variables)
+        public static void ProcessAndPrintZplFile(string templateZplFilePath, List<Dictionary<string, string>> variables, string printerName)
         {
             //TODO CRAETE A MODEL TO ADD QUANTITY
-            string template = FileUtil.ReadFile(templateZplFilePath);
-            if (!String.IsNullOrEmpty(template))
+            string zplTemplate = FileUtil.ReadFile(templateZplFilePath);
+            string zplToPrint = zplTemplate;
+            if (!String.IsNullOrEmpty(zplTemplate))
             {
                 foreach (var item in variables)
                 {
                     foreach (var variable in item)
                     {
-                        template = template?.Replace($"@{variable.Key}@", variable.Value);
+                        Console.WriteLine(variable.Key + " "+ variable.Value);
+                        zplToPrint = zplToPrint?.Replace($"@{variable.Key}@", variable.Value);
+
                     }
-                    FileUtil.WriteInFile("./dynamicZpl.zpl", template);
+                    RawPrinterHelper.SendStringToPrinter(printerName, zplToPrint);
+                    // resetting and prepparing for the next print
+                    zplToPrint = zplTemplate;
                     //todo temporarryfile
                     //todo add method to not overwrite file
                 }
@@ -41,4 +46,3 @@ namespace XmlToZpl.Processors
     }
 
 }
-
