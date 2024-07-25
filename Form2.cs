@@ -25,6 +25,7 @@ namespace XmlToZpl
             InitializeComponent();
             button2.Enabled = false;
             dbHelper = new DatabaseHelper(connectionString);
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void Form2_Load(object sender, EventArgs e)
@@ -134,7 +135,15 @@ namespace XmlToZpl
             {
                 if (replacementsList != null)
                 {
-                    ZplTemplateProcessor.ProcessAndPrintZplFile(zplFilePath, replacementsList, printDialog1.PrinterSettings.PrinterName);
+                    if(replacementsList.Count == 0)
+                    {
+                        MessageBox.Show("Nothing to print!");
+                    }
+                    else
+                    {
+                        ZplTemplateProcessor.ProcessAndPrintZplFile(zplFilePath, replacementsList, printDialog1.PrinterSettings.PrinterName);
+                        MessageBox.Show("Printed " + replacementsList.Count + " labels!");
+                    }
                 }
             }
 

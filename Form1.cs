@@ -40,6 +40,7 @@ namespace XmlToZpl
             button5.Visible = false;
             label3.Visible = false;
             dbHelper = new DatabaseHelper(connectionString);
+            this.StartPosition = FormStartPosition.CenterScreen;
         }
 
         // GENERATE DYNAMIC ZPL BUTTON
