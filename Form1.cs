@@ -83,7 +83,7 @@ namespace XmlToZpl
                 this.xmlFilePath = fileNamePath;
                 textBox1.Visible = true;
                 label3.Visible = true;
-                getColumnFromBDD();
+                    getColumnFromBDD();
                     if (XmlToZplConverter.CheckIfXmlHasImage(fileNamePath))
                 {
                     button4.Visible = true;

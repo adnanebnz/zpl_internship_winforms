@@ -36,33 +36,60 @@ namespace XmlToZpl
             try
             {
                 List<Bien> biens = dbHelper.FetchBienDataFromDb();
+
+                // Clear any existing data bindings
+                bienBindingSource.Clear();
+
                 foreach (var item in biens)
                 {
                     bienBindingSource.Add(item);
                 }
+
+                // Add a checkbox column for selection
+                DataGridViewCheckBoxColumn checkboxColumn = new DataGridViewCheckBoxColumn();
+                checkboxColumn.HeaderText = "Select";
+                checkboxColumn.Name = "selectColumn";
+                dataGridView1.Columns.Insert(0, checkboxColumn);
+                dataGridView1.DataSource = bienBindingSource;
                 dataGridView1.AllowUserToAddRows = false;
-                dataGridView1.SelectionChanged += DataGridView1_SelectionChanged;
                 dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                dataGridView1.CellClick += DataGridView1_CellClick;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
         }
-        private void DataGridView1_SelectionChanged(object sender, EventArgs e)
+
+        private void DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            listeBiensAImprimer.Clear();
-
-
-            foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+            if (e.RowIndex >= 0 && e.ColumnIndex == 0) 
             {
-                Bien bien = row.DataBoundItem as Bien;
-                if (bien != null)
+                DataGridViewCheckBoxCell checkbox = dataGridView1.Rows[e.RowIndex].Cells[0] as DataGridViewCheckBoxCell;
+
+                if (checkbox != null && e.ColumnIndex == checkbox.ColumnIndex)
                 {
-                    listeBiensAImprimer.Add(bien);
+                    bool isChecked = (bool)(checkbox.Value ?? false); 
+                    checkbox.Value = !isChecked;
+
+                    dataGridView1.Rows[e.RowIndex].Selected = true;
+
+                    Bien selectedBien = dataGridView1.Rows[e.RowIndex].DataBoundItem as Bien;
+
+                    if ((bool)checkbox.Value)
+                    {
+                        listeBiensAImprimer.Add(selectedBien);
+                    }
+                    else
+                    {
+                        listeBiensAImprimer.Remove(selectedBien);
+                    }
                 }
             }
         }
+
+
+
         // SELECT JSON FILE BUTTON
         private void button1_Click(object sender, EventArgs e)
         {
