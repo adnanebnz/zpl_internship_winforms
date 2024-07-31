@@ -96,7 +96,6 @@
             this.dataGridView1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.dataGridView1.Size = new System.Drawing.Size(776, 299);
             this.dataGridView1.TabIndex = 6;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // nomLabelDataGridViewTextBoxColumn
             // 

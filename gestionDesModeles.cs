@@ -32,24 +32,7 @@ namespace XmlToZpl
         //Supprimer
         private void button3_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void bindingSource1_CurrentChanged_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
-            {
-                DataGridViewRow selectedRow = dataGridView1.Rows[e.RowIndex];
-
-                selectedLabelFile = selectedRow.Cells["CheminLabel"].Value.ToString();
-
-                Console.WriteLine("Selected Label: " + selectedLabelFile);
-            }
+            Console.WriteLine(selectedLabelFile);
         }
 
         private void gestionDesModeles_Load(object sender, EventArgs e)
@@ -61,7 +44,7 @@ namespace XmlToZpl
         {
             try
             {
-                var labels = dbHelper.FetchLabelsFromDb();
+                List<XmlToZpl.Models.Label> labels = dbHelper.FetchLabelsFromDb();
 
                 // Clear any existing data bindings
                 labelBindingSource.Clear();
@@ -70,12 +53,27 @@ namespace XmlToZpl
                 {
                     labelBindingSource.Add(item);
                 }
-
+                dataGridView1.CellClick += dataGridView1_CellClick;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
         }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex == 0)
+            {
+
+
+                    dataGridView1.Rows[e.RowIndex].Selected = true;
+
+                XmlToZpl.Models.Label selectedlabel = dataGridView1.Rows[e.RowIndex].DataBoundItem as XmlToZpl.Models.Label;
+
+               this.selectedLabelFile = selectedlabel.CheminLabel;
+
+                    }
+            }
+        }
     }
-}
