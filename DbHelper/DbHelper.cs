@@ -140,5 +140,44 @@ namespace XmlToZpl.DbHelper
                 return biens;
             }
         }
+        public List<Label> FetchLabelsFromDb()
+        {
+            List<Label> labels = new List<Label>();
+            try
+            {
+                using (SqlConnection connection = GetConnection())
+                {
+                    OpenConnection(connection);
+
+                    SqlCommand command = connection.CreateCommand();
+                    command.CommandType = CommandType.Text;
+                    string stmt = "SELECT * FROM Labels";
+                    command.CommandText = stmt;
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Label label = new Label();
+
+                            label.NomLabel = reader["NomLabel"].ToString();
+                            label.CheminLabel = reader["CheminLabel"].ToString();
+
+                            labels.Add(label);
+                        }
+                    }
+
+                    CloseConnection(connection);
+                }
+
+                return labels;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error fetching Label data: " + e.Message);
+                labels.Clear();
+                return labels;
+            }
+        }
     }
 }

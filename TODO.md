@@ -1,3 +1,1 @@
-- [ ] implement pagination for table
-- [ ] implement select data to print from table using a checkbox
 - [ ] mmake the UI responsive and start the forms in center position
