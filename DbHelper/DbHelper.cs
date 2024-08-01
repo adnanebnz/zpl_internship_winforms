@@ -162,6 +162,7 @@ namespace XmlToZpl.DbHelper
 
                             label.NomLabel = reader["NomLabel"].ToString();
                             label.CheminLabel = reader["CheminLabel"].ToString();
+                            label.CheminZpl = reader["CheminZpl"].ToString();
 
                             labels.Add(label);
                         }
@@ -177,6 +178,79 @@ namespace XmlToZpl.DbHelper
                 Console.WriteLine("Error fetching Label data: " + e.Message);
                 labels.Clear();
                 return labels;
+            }
+        }
+        // TODO USE THIS IN THE FORM1
+        public bool InsertLabelIntoDb(Label label)
+        {
+            try
+            {
+                using (SqlConnection connection = GetConnection())
+                {
+                    OpenConnection(connection);
+
+                    SqlCommand command = connection.CreateCommand();
+                    command.CommandType = CommandType.Text;
+                    command.CommandText = "INSERT INTO Labels (NomLabel, CheminLabel, CheminZpl) VALUES (@NomLabel, @CheminLabel, @CheminZpl)";
+
+                    command.Parameters.AddWithValue("@NomLabel", (object)label.NomLabel ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@CheminLabel", (object)label.CheminLabel ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@CheminZpl", (object)label.CheminZpl ?? DBNull.Value);
+
+                    int rowsAffected = command.ExecuteNonQuery();
+                    CloseConnection(connection);
+
+                    return rowsAffected > 0;
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                // Log SQL exceptions specifically
+                Console.WriteLine("SQL Error inserting Label data: " + sqlEx.Message);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                // Log general exceptions
+                Console.WriteLine("Error inserting Label data: " + ex.Message);
+                return false;
+            }
+        }
+
+        // TODO USE THIS IN THE first page
+        public bool DeleteLabelFromDb(Label label)
+        {
+            try
+            {
+                using (SqlConnection connection = GetConnection())
+                {
+                    OpenConnection(connection);
+
+                    SqlCommand command = connection.CreateCommand();
+                    command.CommandType = CommandType.Text;
+                    command.CommandText = "DELETE FROM Labels WHERE NomLabel = @NomLabel AND CheminLabel = @CheminLabel AND CheminZpl = @CheminZpl";
+
+                    command.Parameters.AddWithValue("@NomLabel", (object)label.NomLabel ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@CheminLabel", (object)label.CheminLabel ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@CheminZpl", (object)label.CheminZpl ?? DBNull.Value);
+
+                    int rowsAffected = command.ExecuteNonQuery();
+                    CloseConnection(connection);
+
+                    return rowsAffected > 0;
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                // Log SQL exceptions specifically
+                Console.WriteLine("SQL Error deleting Label data: " + sqlEx.Message);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                // Log general exceptions
+                Console.WriteLine("Error deleting Label data: " + ex.Message);
+                return false;
             }
         }
     }
