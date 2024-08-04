@@ -35,28 +35,112 @@ namespace XmlToZpl
         private void gestionDesModeles_Load(object sender, EventArgs e)
         {
             formLoad();
-
         }
 
         public void formLoad()
         {
             try
             {
-                List<XmlToZpl.Models.Label> labels = dbHelper.FetchLabelsFromDb();
+                // Fetch labels from the database
+                List<Models.Label> labels = dbHelper.FetchLabelsFromDb();
 
-                // Clear any existing data bindings
+                // Clear existing data bindings
                 labelBindingSource.Clear();
 
+                // Add fetched labels to the binding source
                 foreach (var item in labels)
                 {
                     labelBindingSource.Add(item);
                 }
+
+                // Assign the binding source to the DataGridView
+                dataGridView1.DataSource = labelBindingSource;
+
+                // Ensure the ComboBox column is set up correctly
+                var comboBoxColumn = dataGridView1.Columns["ChooseLabel"] as DataGridViewComboBoxColumn;
+
+                // Set the ComboBox cell values after the DataGridView has been populated
+                foreach (DataGridViewRow row in dataGridView1.Rows)
+                {
+                    var label = row.DataBoundItem as Models.Label;
+                    if (label != null)
+                    {
+                        // Determine the cell value based on the label's property
+                        string cellValue = "Non";
+                        if(label.ModeleParDefaut == 1 )
+                        {
+                            cellValue = "Oui";
+                        }
+                        row.Cells["ChooseLabel"].Value = cellValue;
+                    }
+                }
+
+                // Event handlers
                 dataGridView1.CellClick += dataGridView1_CellClick;
                 dataGridView1.UserDeletingRow += deleteButton_Click;
+                dataGridView1.CurrentCellDirtyStateChanged += dataGridView1_CurrentCellDirtyStateChanged;
+                dataGridView1.CellValueChanged += dataGridView1_CellValueChanged;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+            }
+        }
+
+
+        private void dataGridView1_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (dataGridView1.CurrentCell is DataGridViewComboBoxCell)
+            {
+                dataGridView1.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
+        private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            // Ensure the event is triggered for valid columns and rows
+            if (e.ColumnIndex == dataGridView1.Columns["ChooseLabel"].Index && e.RowIndex >= 0)
+            {
+                // Get the new value of the changed cell
+                var newValue = dataGridView1[e.ColumnIndex, e.RowIndex].Value as string;
+
+                if (newValue != null)
+                {
+                    // Handle the change
+                    MessageBox.Show($"Value changed to: {newValue}");
+
+                    // Check if "Oui" exists in any row of the ComboBox column
+                    int counter = 0;
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                    {
+                        // Ensure that the cell value is of type string
+                        var cellValue = row.Cells[e.ColumnIndex].Value as string;
+                        if (cellValue == "Oui")
+                        {
+                            counter++;
+                            if (counter >= 2)
+                            {
+                                break;
+                            }
+                        }
+                    }
+
+                    if (counter >= 2)
+                    {
+                        MessageBox.Show("Error: More than 1 row has 'Oui' selected.");
+                        return;
+                    }
+
+                   
+                    if (newValue == "Oui")
+                    {
+                        dbHelper.ModifyLabelStatus(1, selectedLabel.Id);
+                    }
+                    else
+                    {
+                        dbHelper.ModifyLabelStatus(0, selectedLabel.Id);
+                    }
+                }
             }
         }
 

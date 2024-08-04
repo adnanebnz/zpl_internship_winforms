@@ -159,7 +159,8 @@ namespace XmlToZpl.DbHelper
                         while (reader.Read())
                         {
                             Label label = new Label();
-
+                            label.Id = Convert.ToInt32(reader["Id"]);
+                            label.ModeleParDefaut = Convert.ToInt32(reader["ModeleParDefaut"]);
                             label.NomLabel = reader["NomLabel"].ToString();
                             label.CheminLabel = reader["CheminLabel"].ToString();
                             label.CheminZpl = reader["CheminZpl"].ToString();
@@ -253,5 +254,45 @@ namespace XmlToZpl.DbHelper
                 return false;
             }
         }
+        public bool ModifyLabelStatus(int status, int labelId)
+        {
+            try
+            {
+                using (SqlConnection connection = GetConnection())
+                {
+                    OpenConnection(connection);
+
+                    using (SqlCommand command = connection.CreateCommand())
+                    {
+                        command.CommandType = CommandType.Text;
+                        command.CommandText = "UPDATE Labels SET ModeleParDefaut = @ModeleParDefaut WHERE Id = @Id";
+
+                        // Add parameters to prevent SQL injection
+                        command.Parameters.AddWithValue("@ModeleParDefaut", status);
+                        command.Parameters.AddWithValue("@Id", labelId);
+
+                        // Execute the command
+                        int rowsAffected = command.ExecuteNonQuery();
+
+                        // Optionally check if any rows were affected
+                        if (rowsAffected > 0)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            // No rows were updated, handle accordingly
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error modifying Label status: " + e.Message);
+                return false;
+            }
+        }
+
     }
 }

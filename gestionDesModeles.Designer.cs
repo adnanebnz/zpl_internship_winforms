@@ -36,7 +36,7 @@
             this.nomLabelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cheminLabelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CheminZpl = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ChooseLabel = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.ChooseLabel = new System.Windows.Forms.DataGridViewComboBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.labelBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -106,8 +106,10 @@
             // 
             // ChooseLabel
             // 
-            this.ChooseLabel.HeaderText = "Utiliser le modéle";
+            this.ChooseLabel.DataSource = this.labelBindingSource;
+            this.ChooseLabel.HeaderText = "modéle par defaut";
             this.ChooseLabel.Name = "ChooseLabel";
+            this.ChooseLabel.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             // 
             // gestionDesModeles
             // 
@@ -136,6 +138,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn nomLabelDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn cheminLabelDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn CheminZpl;
-        private System.Windows.Forms.DataGridViewButtonColumn ChooseLabel;
+        private System.Windows.Forms.DataGridViewComboBoxColumn ChooseLabel;
     }
 }
