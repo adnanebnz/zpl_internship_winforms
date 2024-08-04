@@ -59,19 +59,22 @@ namespace XmlToZpl
                 // Ensure the ComboBox column is set up correctly
                 var comboBoxColumn = dataGridView1.Columns["ChooseLabel"] as DataGridViewComboBoxColumn;
 
-                // Set the ComboBox cell values after the DataGridView has been populated
-                foreach (DataGridViewRow row in dataGridView1.Rows)
+                if (comboBoxColumn != null)
                 {
-                    var label = row.DataBoundItem as Models.Label;
-                    if (label != null)
+                    // Set possible values for the ComboBox column
+                    comboBoxColumn.Items.Clear();
+                    comboBoxColumn.Items.Add("Oui");
+                    comboBoxColumn.Items.Add("Non");
+
+                    // Set the ComboBox cell values after the DataGridView has been populated
+                    foreach (DataGridViewRow row in dataGridView1.Rows)
                     {
-                        // Determine the cell value based on the label's property
-                        string cellValue = "Non";
-                        if(label.ModeleParDefaut == 1 )
+                        if (row.DataBoundItem is Models.Label label)
                         {
-                            cellValue = "Oui";
+                            // Determine the cell value based on the label's property
+                            string cellValue = label.ModeleParDefaut == 1 ? "Oui" : "Non";
+                            row.Cells["ChooseLabel"].Value = cellValue;
                         }
-                        row.Cells["ChooseLabel"].Value = cellValue;
                     }
                 }
 
@@ -86,7 +89,6 @@ namespace XmlToZpl
                 Console.WriteLine(e.Message);
             }
         }
-
 
         private void dataGridView1_CurrentCellDirtyStateChanged(object sender, EventArgs e)
         {
@@ -193,11 +195,11 @@ namespace XmlToZpl
 
 
                 if (selectedLabel != null)
-                    {
+                {
                     this.selectedLabel = selectedLabel;
-                    this.selectedLabelFile = selectedLabel.CheminLabel;
-                    }
+                    selectedLabelFile = selectedLabel.CheminLabel;
                 }
             }
+        }
         }
     }
