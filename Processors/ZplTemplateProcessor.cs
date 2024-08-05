@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Xml.Linq;
 using XmlToZpl.Utils;
 
@@ -15,9 +17,6 @@ namespace XmlToZpl.Processors
             string finalzpl = "";
             if (!String.IsNullOrEmpty(zplTemplate))
             {
-                // ECRAN AJOUTER LISTE DES MODELES XML ET AFFICHER ET ADD ATTRIBUTE TO XML DANS LE MAPPING POUR LES VARIABLES BDD ET ENREGISTRER NE PAS ECRASER
-                //AJOUTER ATTRIBUT TABLENAME XML QUI SPECIFIE LE NOM DE LA TABLE 
-                //WE CAN KNOW THE CONFIG WHEN WE CHECK THE NAMES WITH DBNAME ATTRIBUTES FOR XML AND WE NEEDA  SCREEN FOR IT
                 foreach (var item in variables)
                 {
                     foreach (var variable in item)
@@ -51,18 +50,16 @@ namespace XmlToZpl.Processors
         {
             try
             {
+                // Read the XML content from the file
                 string xmlContent = FileUtil.ReadFile(xmlFilePath);
                 XDocument xml = XDocument.Parse(xmlContent);
 
-                // Traverse through all elements
-                //add an attrivute called TableName with an attribute Name that has the table Name
+                // Update XML attributes based on the dictionary
                 foreach (var element in xml.Root?.Element("Items")?.Elements())
                 {
-                    // Check if the element has a Name attribute
                     XAttribute nameAttribute = element.Attribute("Name");
                     if (nameAttribute != null)
                     {
-                        // Check if the Name attribute value exists in the dictionary
                         string nameValue = nameAttribute.Value;
                         if (mapDictionary.ContainsKey(nameValue))
                         {
@@ -72,16 +69,25 @@ namespace XmlToZpl.Processors
                     }
                 }
 
-                // Save the modified XML content back to the file
-                xml.Save(xmlFilePath);
+                string directoryPath = "./modeles";
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+
+                string fileName = Path.GetFileName(xmlFilePath);
+                string newFilePath = Path.Combine(directoryPath, fileName);
+
+                xml.Save(newFilePath);
+
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
+                // Log or handle the exception
+                Console.WriteLine("Error updating XML: " + ex.Message);
                 return false;
             }
-
         }
     }
 

@@ -9,23 +9,16 @@ namespace XmlToZpl
     {
         private DatabaseHelper dbHelper;
         private string connectionString = "server=localhost\\SQLEXPRESS;database=Inventaire BDD;Trusted_Connection=True;";
-        private Form1 formInstance;
         private string selectedLabelFile;
-        private XmlToZpl.Models.Label selectedLabel;
+        private Models.Label selectedLabel;
+
         public gestionDesModeles()
         {
             InitializeComponent();
             dbHelper = new DatabaseHelper(connectionString);
-            this.StartPosition = FormStartPosition.CenterScreen;
-            formInstance = new Form1();
+            StartPosition = FormStartPosition.CenterScreen;
         }
-        //Utiliser
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Form2 form2 = new Form2();
-            form2.Show();
-        }
-        // Ajouter un modéle
+
         private void button3_Click(object sender, EventArgs e)
         {
             Form1 form1 = new Form1();
@@ -41,40 +34,25 @@ namespace XmlToZpl
         {
             try
             {
-                // Fetch labels from the database
                 List<Models.Label> labels = dbHelper.FetchLabelsFromDb();
 
-                // Clear existing data bindings
                 labelBindingSource.Clear();
 
-                // Add fetched labels to the binding source
                 foreach (var item in labels)
                 {
                     labelBindingSource.Add(item);
                 }
 
-                // Assign the binding source to the DataGridView
                 dataGridView1.DataSource = labelBindingSource;
 
-                // Ensure the ComboBox column is set up correctly
-                var comboBoxColumn = dataGridView1.Columns["ChooseLabel"] as DataGridViewComboBoxColumn;
+                SetupComboBoxColumn();
 
-                if (comboBoxColumn != null)
+                foreach (DataGridViewRow row in dataGridView1.Rows)
                 {
-                    // Set possible values for the ComboBox column
-                    comboBoxColumn.Items.Clear();
-                    comboBoxColumn.Items.Add("Oui");
-                    comboBoxColumn.Items.Add("Non");
-
-                    // Set the ComboBox cell values after the DataGridView has been populated
-                    foreach (DataGridViewRow row in dataGridView1.Rows)
+                    if (row.DataBoundItem is Models.Label label)
                     {
-                        if (row.DataBoundItem is Models.Label label)
-                        {
-                            // Determine the cell value based on the label's property
-                            string cellValue = label.ModeleParDefaut == 1 ? "Oui" : "Non";
-                            row.Cells["ChooseLabel"].Value = cellValue;
-                        }
+                        string cellValue = label.ModeleParDefaut == 1 ? "Oui" : "Non";
+                        row.Cells["ChooseLabel"].Value = cellValue;
                     }
                 }
 
@@ -86,7 +64,23 @@ namespace XmlToZpl
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                MessageBox.Show($"Error loading data: {e.Message}");
+            }
+        }
+
+        private void SetupComboBoxColumn()
+        {
+            if (dataGridView1.Columns["ChooseLabel"] == null)
+            {
+                DataGridViewComboBoxColumn comboBoxColumn = new DataGridViewComboBoxColumn
+                {
+                    Name = "ChooseLabel",
+                    HeaderText = "Choose Label",
+                    DataSource = new List<string> { "Oui", "Non" },
+                    FlatStyle = FlatStyle.Flat,
+                };
+
+                dataGridView1.Columns.Add(comboBoxColumn);
             }
         }
 
@@ -100,47 +94,47 @@ namespace XmlToZpl
 
         private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            // Ensure the event is triggered for valid columns and rows
             if (e.ColumnIndex == dataGridView1.Columns["ChooseLabel"].Index && e.RowIndex >= 0)
             {
-                // Get the new value of the changed cell
                 var newValue = dataGridView1[e.ColumnIndex, e.RowIndex].Value as string;
 
                 if (newValue != null)
                 {
-                    // Handle the change
-                    MessageBox.Show($"Value changed to: {newValue}");
+                    int ouiCount = 0;
+                    DataGridViewRow changedRow = dataGridView1.Rows[e.RowIndex];
 
-                    // Check if "Oui" exists in any row of the ComboBox column
-                    int counter = 0;
+                    // Count the number of "Oui" values in the column
                     foreach (DataGridViewRow row in dataGridView1.Rows)
                     {
-                        // Ensure that the cell value is of type string
                         var cellValue = row.Cells[e.ColumnIndex].Value as string;
                         if (cellValue == "Oui")
                         {
-                            counter++;
-                            if (counter >= 2)
-                            {
-                                break;
-                            }
+                            ouiCount++;
                         }
                     }
 
-                    if (counter >= 2)
+                    // Ensure that only one "Oui" is selected
+                    if (newValue == "Oui" && ouiCount > 1)
                     {
                         MessageBox.Show("Error: More than 1 row has 'Oui' selected.");
+                        // Revert the value back to "Non"
+                        dataGridView1[e.ColumnIndex, e.RowIndex].Value = "Non";
                         return;
                     }
 
-                   
-                    if (newValue == "Oui")
+                    // Update the database based on newValue
+                    if (selectedLabel != null)
                     {
-                        dbHelper.ModifyLabelStatus(1, selectedLabel.Id);
-                    }
-                    else
-                    {
-                        dbHelper.ModifyLabelStatus(0, selectedLabel.Id);
+                        if (newValue == "Oui")
+                        {
+                            // Set the status for the selected label to 1
+                            dbHelper.ModifyLabelStatus(1, selectedLabel.Id);
+                        }
+                        else
+                        {
+                            // Set the status for the selected label to 0
+                            dbHelper.ModifyLabelStatus(0, selectedLabel.Id);
+                        }
                     }
                 }
             }
@@ -151,8 +145,7 @@ namespace XmlToZpl
             // Ensure that a row is selected
             if (dataGridView1.SelectedRows.Count > 0)
             {
-
-                if (this.selectedLabel != null)
+                if (selectedLabel != null)
                 {
                     // Confirm deletion
                     DialogResult result = MessageBox.Show("Are you sure you want to delete this label?", "Confirm Deletion", MessageBoxButtons.YesNo);
@@ -160,11 +153,12 @@ namespace XmlToZpl
                     if (result == DialogResult.Yes)
                     {
                         // Perform the deletion
-                        bool success = dbHelper.DeleteLabelFromDb(this.selectedLabel);
+                        bool success = dbHelper.DeleteLabelFromDb(selectedLabel);
 
                         if (success)
                         {
                             MessageBox.Show("Label deleted successfully.");
+                            formLoad(); // Refresh the data after deletion
                         }
                         else
                         {
@@ -183,7 +177,6 @@ namespace XmlToZpl
             }
         }
 
-
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Make sure the click is on a valid row index
@@ -191,15 +184,24 @@ namespace XmlToZpl
             {
                 dataGridView1.Rows[e.RowIndex].Selected = true;
 
-                XmlToZpl.Models.Label selectedLabel = dataGridView1.Rows[e.RowIndex].DataBoundItem as XmlToZpl.Models.Label;
-
-
-                if (selectedLabel != null)
+                if (dataGridView1.Rows[e.RowIndex].DataBoundItem is Models.Label label)
                 {
-                    this.selectedLabel = selectedLabel;
-                    selectedLabelFile = selectedLabel.CheminLabel;
+                    selectedLabel = label;
+                    selectedLabelFile = label.CheminLabel;
                 }
             }
         }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            Form2 form2 = new Form2(selectedLabel.CheminZpl);
+            form2.Show();
+        }
+
+        //Supprimer
+        private void button2_Click(object sender, EventArgs e)
+        {
+            deleteButton_Click(sender, e);
         }
     }
+}

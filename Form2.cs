@@ -13,19 +13,22 @@ namespace XmlToZpl
 {
     public partial class Form2 : Form
     {
-        private string zplFilePath;
+        public string zplFilePath;
         private string jsonFilePath;
         private string zplResult;
         private DatabaseHelper dbHelper;
         private string connectionString = "server=localhost\\SQLEXPRESS;database=Inventaire BDD;Trusted_Connection=True;";
         private List<Bien> listeBiensAImprimer = new List<Bien>();
         private List<Dictionary<string, string>> replacementsList = new List<Dictionary<string, string>>();
-        public Form2()
+        public static Form2 instance;
+
+        public Form2(string zplFilePath = "")
         {
             InitializeComponent();
-            button2.Enabled = false;
+            this.zplFilePath = zplFilePath;
             dbHelper = new DatabaseHelper(connectionString);
-            this.StartPosition = FormStartPosition.CenterScreen;
+            StartPosition = FormStartPosition.CenterScreen;
+            richTextBox1.Text = zplFilePath;
         }
 
         private void Form2_Load(object sender, EventArgs e)

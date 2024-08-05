@@ -22,7 +22,7 @@ namespace XmlToZpl
         private string newImageFilePath;
         private DatabaseHelper dbHelper;
         private string connectionString = "server=localhost\\SQLEXPRESS;database=Inventaire BDD;Trusted_Connection=True;";
-
+        private string labelName = "";
         private List<string> bddValues = new List<string> { };
 
         public Form1()
@@ -67,10 +67,50 @@ namespace XmlToZpl
 
 
             string result = ZplTemplateProcessor.MapTemplate(this.zplResult, this.mappingDictionary);
-            bool res = ZplTemplateProcessor.AddMappingVariablesToXml(this.xmlFilePath,mappingDictionary);
+
+            // Add mapping variables to XML
+            bool res = ZplTemplateProcessor.AddMappingVariablesToXml(this.xmlFilePath, this.mappingDictionary);
+
+            // Define the directory and ensure it exists
+            string directoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "modeles");
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            // Construct the new file path for the .zpl file
+            string fileName = Path.GetFileNameWithoutExtension(this.xmlFilePath) + ".zpl";
+            string newFilePath = Path.Combine(directoryPath, fileName);
+
+            // Write the result to the new .zpl file
+            FileUtil.WriteInFile(newFilePath, result);
+
+            Console.WriteLine("SAVED FILE");
+            Console.WriteLine(result);
+
+            // Create a new Label instance
+            string labelName = textBox3.Text;
+            Models.Label label = new Models.Label
+            {
+                CheminLabel = Path.Combine(directoryPath, Path.GetFileName(this.xmlFilePath)),
+                CheminZpl = newFilePath,
+                NomLabel = labelName
+            };
+
+            // You might want to perform additional operations with the 'label' object here
+
+            bool registerResult =  dbHelper.InsertLabelIntoDb(label);
+            if (String.IsNullOrEmpty(labelName))
+            {
+                MessageBox.Show("Please insert your config name");
+            }
             if (!res)
             {
                 MessageBox.Show("Error saving the file");
+            }
+            if (!registerResult)
+            {
+                MessageBox.Show("Erreur, le nom de la config existe déja");
             }
             else
             {
@@ -79,9 +119,7 @@ namespace XmlToZpl
                     MessageBox.Show("Xml Config saved!");
                 }
             }
-            Console.WriteLine(result);
-            FileUtil.WriteInFile("./dynamicZpl.zpl", result);
-            Console.WriteLine("SAVED FILE");
+          
         }
 
         // LOAD XML BUTTON

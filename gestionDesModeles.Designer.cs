@@ -32,20 +32,22 @@
             this.button3 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.labelBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CheminZpl = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.nomLabelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cheminLabelDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CheminZpl = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ChooseLabel = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.labelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.labelBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(259, 67);
+            this.button3.Location = new System.Drawing.Point(12, 67);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(282, 50);
+            this.button3.Size = new System.Drawing.Size(218, 50);
             this.button3.TabIndex = 2;
             this.button3.Text = "Ajouter";
             this.button3.UseVisualStyleBackColor = true;
@@ -69,10 +71,10 @@
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Id,
             this.nomLabelDataGridViewTextBoxColumn,
             this.cheminLabelDataGridViewTextBoxColumn,
-            this.CheminZpl,
-            this.ChooseLabel});
+            this.CheminZpl});
             this.dataGridView1.DataSource = this.labelBindingSource;
             this.dataGridView1.Location = new System.Drawing.Point(12, 139);
             this.dataGridView1.Name = "dataGridView1";
@@ -80,9 +82,38 @@
             this.dataGridView1.Size = new System.Drawing.Size(776, 299);
             this.dataGridView1.TabIndex = 6;
             // 
-            // labelBindingSource
+            // Id
             // 
-            this.labelBindingSource.DataSource = typeof(XmlToZpl.Models.Label);
+            this.Id.DataPropertyName = "Id";
+            this.Id.HeaderText = "Id";
+            this.Id.Name = "Id";
+            this.Id.ReadOnly = true;
+            // 
+            // CheminZpl
+            // 
+            this.CheminZpl.DataPropertyName = "CheminZpl";
+            this.CheminZpl.HeaderText = "Chemin ZPL";
+            this.CheminZpl.Name = "CheminZpl";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(293, 67);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(218, 50);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "Utiliser";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(570, 67);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(218, 50);
+            this.button2.TabIndex = 8;
+            this.button2.Text = "Supprimer";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // nomLabelDataGridViewTextBoxColumn
             // 
@@ -98,24 +129,17 @@
             this.cheminLabelDataGridViewTextBoxColumn.Name = "cheminLabelDataGridViewTextBoxColumn";
             this.cheminLabelDataGridViewTextBoxColumn.ToolTipText = "Chemin du fichier du label";
             // 
-            // CheminZpl
+            // labelBindingSource
             // 
-            this.CheminZpl.DataPropertyName = "CheminZpl";
-            this.CheminZpl.HeaderText = "Chemin ZPL";
-            this.CheminZpl.Name = "CheminZpl";
-            // 
-            // ChooseLabel
-            // 
-            this.ChooseLabel.DataSource = this.labelBindingSource;
-            this.ChooseLabel.HeaderText = "modéle par defaut";
-            this.ChooseLabel.Name = "ChooseLabel";
-            this.ChooseLabel.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.labelBindingSource.DataSource = typeof(XmlToZpl.Models.Label);
             // 
             // gestionDesModeles
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button3);
@@ -135,9 +159,11 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.BindingSource labelBindingSource;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Id;
         private System.Windows.Forms.DataGridViewTextBoxColumn nomLabelDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn cheminLabelDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn CheminZpl;
-        private System.Windows.Forms.DataGridViewComboBoxColumn ChooseLabel;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }
