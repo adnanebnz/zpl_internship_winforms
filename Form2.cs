@@ -67,13 +67,13 @@ namespace XmlToZpl
 
         private void DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.ColumnIndex == 0) 
+            if (e.RowIndex >= 0 && e.ColumnIndex == 0)
             {
                 DataGridViewCheckBoxCell checkbox = dataGridView1.Rows[e.RowIndex].Cells[0] as DataGridViewCheckBoxCell;
 
                 if (checkbox != null && e.ColumnIndex == checkbox.ColumnIndex)
                 {
-                    bool isChecked = (bool)(checkbox.Value ?? false); 
+                    bool isChecked = (bool)(checkbox.Value ?? false);
                     checkbox.Value = !isChecked;
 
                     dataGridView1.Rows[e.RowIndex].Selected = true;
@@ -138,7 +138,7 @@ namespace XmlToZpl
             {
                 if (replacementsList != null)
                 {
-                    if(replacementsList.Count == 0)
+                    if (replacementsList.Count == 0)
                     {
                         MessageBox.Show("Nothing to print!");
                     }

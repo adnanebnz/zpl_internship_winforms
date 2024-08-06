@@ -75,7 +75,7 @@ namespace XmlToZpl
                 DataGridViewComboBoxColumn comboBoxColumn = new DataGridViewComboBoxColumn
                 {
                     Name = "ChooseLabel",
-                    HeaderText = "Choose Label",
+                    HeaderText = "Modéle par defaut?",
                     DataSource = new List<string> { "Oui", "Non" },
                     FlatStyle = FlatStyle.Flat,
                 };

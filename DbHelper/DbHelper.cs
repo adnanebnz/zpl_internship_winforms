@@ -202,9 +202,8 @@ namespace XmlToZpl.DbHelper
                     {
                         if (reader.Read())
                         {
-                            labelExists = true; // Set flag to true if label exists
+                            labelExists = true;
 
-                            // Optionally, you can also retrieve the label details
                             label.Id = Convert.ToInt32(reader["Id"]);
                             label.ModeleParDefaut = Convert.ToInt32(reader["ModeleParDefaut"]);
                             label.NomLabel = reader["NomLabel"].ToString();
@@ -219,7 +218,6 @@ namespace XmlToZpl.DbHelper
             catch (Exception e)
             {
                 Console.WriteLine("Error fetching Label data: " + e.Message);
-                // Log the exception or handle it appropriately
             }
 
             return labelExists;
@@ -229,7 +227,6 @@ namespace XmlToZpl.DbHelper
         {
             try
             {
-                // Check if the label already exists in the database
                 if (!SelectLabelIfExists(label))
                 {
                     using (SqlConnection connection = GetConnection())
@@ -270,9 +267,6 @@ namespace XmlToZpl.DbHelper
             }
         }
 
-
-
-        // TODO USE THIS IN THE first page
         public bool DeleteLabelFromDb(Label label)
         {
             try
@@ -329,11 +323,9 @@ namespace XmlToZpl.DbHelper
                         command.CommandType = CommandType.Text;
                         command.CommandText = "UPDATE Labels SET ModeleParDefaut = @ModeleParDefaut WHERE Id = @Id";
 
-                        // Add parameters to prevent SQL injection
                         command.Parameters.AddWithValue("@ModeleParDefaut", status);
                         command.Parameters.AddWithValue("@Id", labelId);
 
-                        // Execute the command
                         int rowsAffected = command.ExecuteNonQuery();
 
                         // Optionally check if any rows were affected

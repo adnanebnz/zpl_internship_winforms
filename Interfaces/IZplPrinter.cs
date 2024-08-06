@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 namespace XmlToZpl.Interfaces
 {
-    public interface ZplPrinterInterface
+    public interface IZplPrinter
     {
-        bool PrintLabel(string zplFilepath, List<Dictionary<string, string>> data,string printerName);
+        bool PrintLabel(string zplFilepath, List<Dictionary<string, string>> data, string printerName);
 
         bool ConvertXmlToZpl(string xmlFilePath, string zplOutputFile);
     }

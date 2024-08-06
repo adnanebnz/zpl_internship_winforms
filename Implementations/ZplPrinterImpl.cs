@@ -5,10 +5,9 @@ using System.Collections.Generic;
 using System;
 namespace XmlToZpl.Implementations
 {
-    //TODO SEE HOW TO USE THIS
-    public class ZplPrinterInterfaceImpl : ZplPrinterInterface
+    public class ZplPrinterImpl : IZplPrinter
     {
-        public bool PrintLabel(string zplFilePath, List<Dictionary<string, string>> data,string printerName)
+        public bool PrintLabel(string zplFilePath, List<Dictionary<string, string>> data, string printerName)
         {
             try
             {

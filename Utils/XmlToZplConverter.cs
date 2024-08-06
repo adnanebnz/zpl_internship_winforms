@@ -27,7 +27,7 @@ namespace XmlToZpl.Utils
             XDocument xml;
             if (!String.IsNullOrEmpty(xmlContent))
             {
-                 xml = XDocument.Parse(xmlContent);
+                xml = XDocument.Parse(xmlContent);
             }
             else
             {

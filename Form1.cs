@@ -99,7 +99,7 @@ namespace XmlToZpl
 
             // You might want to perform additional operations with the 'label' object here
 
-            bool registerResult =  dbHelper.InsertLabelIntoDb(label);
+            bool registerResult = dbHelper.InsertLabelIntoDb(label);
             if (String.IsNullOrEmpty(labelName))
             {
                 MessageBox.Show("Please insert your config name");
@@ -119,7 +119,6 @@ namespace XmlToZpl
                     MessageBox.Show("Xml Config saved!");
                 }
             }
-          
         }
 
         // LOAD XML BUTTON

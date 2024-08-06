@@ -6,6 +6,6 @@ namespace XmlToZpl.Models
     {
         public string Quantity { get; set; }
 
-        public Dictionary<string,string> variables { get; set; }
+        public Dictionary<string, string> variables { get; set; }
     }
 }

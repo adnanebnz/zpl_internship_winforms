@@ -75,14 +75,10 @@ namespace XmlToZpl.Utils
                         // Get the pixel's color.
                         Color originalColor = originalImage.GetPixel(x, y);
 
-                        // Calculate the grayscale value using the luminance method.
                         int grayScale = (int)((originalColor.R * 0.3) + (originalColor.G * 0.59) + (originalColor.B * 0.11));
 
-                        // Convert the grayscale to black or white based on a threshold.
-                        // Here, 128 is used as the threshold; adjust as needed for different effects.
                         Color bwColor = grayScale > 128 ? Color.White : Color.Black;
 
-                        // Set the new image's pixel to black or white.
                         monochromeImage.SetPixel(x, y, bwColor);
                     }
                 }
