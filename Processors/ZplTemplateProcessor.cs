@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Xml.Linq;
 using XmlToZpl.Utils;
 
@@ -25,7 +24,6 @@ namespace XmlToZpl.Processors
                         zplToPrint = zplToPrint?.Replace($"@{variable.Key}@", variable.Value);
                     }
                     finalzpl += zplToPrint;
-                    // resetting and prepparing for the next print
                     zplToPrint = zplTemplate;
                 }
                 RawPrinterHelper.SendStringToPrinter(printerName, finalzpl);
@@ -50,11 +48,9 @@ namespace XmlToZpl.Processors
         {
             try
             {
-                // Read the XML content from the file
                 string xmlContent = FileUtil.ReadFile(xmlFilePath);
                 XDocument xml = XDocument.Parse(xmlContent);
 
-                // Update XML attributes based on the dictionary
                 foreach (var element in xml.Root?.Element("Items")?.Elements())
                 {
                     XAttribute nameAttribute = element.Attribute("Name");
@@ -84,7 +80,6 @@ namespace XmlToZpl.Processors
             }
             catch (Exception ex)
             {
-                // Log or handle the exception
                 Console.WriteLine("Error updating XML: " + ex.Message);
                 return false;
             }

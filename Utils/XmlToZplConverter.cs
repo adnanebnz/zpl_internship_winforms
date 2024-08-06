@@ -183,14 +183,9 @@ namespace XmlToZpl.Utils
                         if (File.Exists(imagePath))
                         {
                             Bitmap originalImage = new Bitmap(imagePath);
-
-                            // Convert image to monochrome
                             originalImage = ImageUtil.ConvertToMonochrome(originalImage);
-
-                            // Resize the image
                             Bitmap resizedImage = new Bitmap(originalImage, width, height);
 
-                            // Convert resized image to binary data
                             string binaryData = "";
                             for (int k = 0; k < height; k++)
                             {
@@ -202,7 +197,6 @@ namespace XmlToZpl.Utils
                                 binaryData += new string('0', (int)Math.Ceiling(width / 8.0) * 8 - width);
                             }
 
-                            // Convert binary data to hexadecimal string
                             string hexData = "";
                             for (int i = 0; i < binaryData.Length; i += 8)
                             {
@@ -210,7 +204,6 @@ namespace XmlToZpl.Utils
                                 hexData += $"{Convert.ToByte(byteString, 2):X2}";
                             }
 
-                            // Calculate bytes and rows for ZPL
                             int rowBytes = (int)Math.Ceiling(width / 8.0);
                             int totalBytes = rowBytes * height;
 
@@ -241,7 +234,6 @@ namespace XmlToZpl.Utils
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load(filePath);
 
-                // Find any ImageItem nodes with SourceData attribute
                 XmlNodeList imageNodes = xmlDoc.SelectNodes("//ImageItem[@SourceData]");
                 return imageNodes.Count > 0;
             }
@@ -256,11 +248,9 @@ namespace XmlToZpl.Utils
         {
             try
             {
-                // Load XML document from file
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load(filePath);
 
-                // Find the ImageItem node and get SourceData attribute value
                 XmlNode imageNode = xmlDoc.SelectSingleNode("//ImageItem[@Source='File']");
                 if (imageNode != null)
                 {
@@ -270,12 +260,10 @@ namespace XmlToZpl.Utils
                         return sourceDataAttribute.Value;
                     }
                 }
-                // If ImageItem with Source='File' or SourceData attribute not found, return null
                 return null;
             }
             catch (Exception ex)
             {
-                // Handle any exceptions (e.g., file not found, XML format error)
                 Console.WriteLine($"Error while reading XML file '{filePath}': {ex.Message}");
                 return null;
             }
@@ -291,11 +279,9 @@ namespace XmlToZpl.Utils
         {
             try
             {
-                // Load XML document from file
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load(xmlFilePath);
 
-                // Find the ImageItem node and update SourceData attribute
                 XmlNode imageNode = xmlDoc.SelectSingleNode("//ImageItem[@Source='File']");
                 if (imageNode != null)
                 {
@@ -313,7 +299,6 @@ namespace XmlToZpl.Utils
                         element.Attributes.Append(sourceDataAttribute);
                     }
 
-                    // Save XML back to file
                     xmlDoc.Save(xmlFilePath);
                     Console.WriteLine($"Image path updated successfully in '{xmlFilePath}'.");
                 }

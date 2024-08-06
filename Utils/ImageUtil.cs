@@ -16,9 +16,7 @@ namespace XmlToZpl.Utils
                     for (int x = 0; x < image.Width; x++)
                     {
                         Color pixelColor = image.GetPixel(x, y);
-                        // Convert pixel to grayscale using the formula: 0.3*R + 0.59*G + 0.11*B
                         int grayScale = (int)((pixelColor.R * 0.3) + (pixelColor.G * 0.59) + (pixelColor.B * 0.11));
-                        // If the grayscale value is greater than 128, consider it "white" (0), else "black" (1)
                         binaryData.Append(grayScale > 128 ? '0' : '1');
                     }
                 }
@@ -37,7 +35,6 @@ namespace XmlToZpl.Utils
             StringBuilder hexString = new StringBuilder();
             try
             {
-                // Ensure the binary data length is a multiple of 8
                 int paddingLength = 8 - (binaryData.Length % 8);
                 if (paddingLength > 0 && paddingLength < 8)
                 {
@@ -46,7 +43,6 @@ namespace XmlToZpl.Utils
 
                 for (int i = 0; i < binaryData.Length; i += 8)
                 {
-                    // Safely create a substring for each byte of data
                     string byteString = binaryData.Substring(i, 8);
                     hexString.AppendFormat("{0:X2}", Convert.ToByte(byteString, 2));
                 }
@@ -72,7 +68,6 @@ namespace XmlToZpl.Utils
                 {
                     for (int x = 0; x < width; x++)
                     {
-                        // Get the pixel's color.
                         Color originalColor = originalImage.GetPixel(x, y);
 
                         int grayScale = (int)((originalColor.R * 0.3) + (originalColor.G * 0.59) + (originalColor.B * 0.11));

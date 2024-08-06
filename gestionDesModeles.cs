@@ -103,7 +103,6 @@ namespace XmlToZpl
                     int ouiCount = 0;
                     DataGridViewRow changedRow = dataGridView1.Rows[e.RowIndex];
 
-                    // Count the number of "Oui" values in the column
                     foreach (DataGridViewRow row in dataGridView1.Rows)
                     {
                         var cellValue = row.Cells[e.ColumnIndex].Value as string;
@@ -113,26 +112,21 @@ namespace XmlToZpl
                         }
                     }
 
-                    // Ensure that only one "Oui" is selected
                     if (newValue == "Oui" && ouiCount > 1)
                     {
                         MessageBox.Show("Error: More than 1 row has 'Oui' selected.");
-                        // Revert the value back to "Non"
                         dataGridView1[e.ColumnIndex, e.RowIndex].Value = "Non";
                         return;
                     }
 
-                    // Update the database based on newValue
                     if (selectedLabel != null)
                     {
                         if (newValue == "Oui")
                         {
-                            // Set the status for the selected label to 1
                             dbHelper.ModifyLabelStatus(1, selectedLabel.Id);
                         }
                         else
                         {
-                            // Set the status for the selected label to 0
                             dbHelper.ModifyLabelStatus(0, selectedLabel.Id);
                         }
                     }
@@ -142,23 +136,20 @@ namespace XmlToZpl
 
         private void deleteButton_Click(object sender, EventArgs e)
         {
-            // Ensure that a row is selected
             if (dataGridView1.SelectedRows.Count > 0)
             {
                 if (selectedLabel != null)
                 {
-                    // Confirm deletion
                     DialogResult result = MessageBox.Show("Are you sure you want to delete this label?", "Confirm Deletion", MessageBoxButtons.YesNo);
 
                     if (result == DialogResult.Yes)
                     {
-                        // Perform the deletion
                         bool success = dbHelper.DeleteLabelFromDb(selectedLabel);
 
                         if (success)
                         {
                             MessageBox.Show("Label deleted successfully.");
-                            formLoad(); // Refresh the data after deletion
+                            formLoad();
                         }
                         else
                         {
@@ -179,7 +170,6 @@ namespace XmlToZpl
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Make sure the click is on a valid row index
             if (e.RowIndex >= 0 && e.RowIndex < dataGridView1.Rows.Count)
             {
                 dataGridView1.Rows[e.RowIndex].Selected = true;

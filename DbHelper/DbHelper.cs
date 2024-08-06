@@ -78,7 +78,6 @@ namespace XmlToZpl.DbHelper
         public List<Bien> FetchBienDataFromDb()
         {
             List<Bien> biens = new List<Bien>();
-            //TODO INTERFACE AND IMPLEMENTATION OF 2 METHODS XMLTOZPL(cheminXml,zplOutputFilePath) AND PRINTLABEL(dictionarry or json as data, cheminZpl)
             try
             {
                 using (SqlConnection connection = GetConnection())
@@ -251,7 +250,6 @@ namespace XmlToZpl.DbHelper
                 }
                 else
                 {
-                    // Label already exists
                     return false;
                 }
             }
@@ -299,13 +297,11 @@ namespace XmlToZpl.DbHelper
             }
             catch (SqlException sqlEx)
             {
-                // Log SQL exceptions specifically
                 Console.WriteLine("SQL Error deleting Label data: " + sqlEx.Message);
                 return false;
             }
             catch (Exception ex)
             {
-                // Log general exceptions
                 Console.WriteLine("Error deleting Label data: " + ex.Message);
                 return false;
             }
@@ -328,14 +324,12 @@ namespace XmlToZpl.DbHelper
 
                         int rowsAffected = command.ExecuteNonQuery();
 
-                        // Optionally check if any rows were affected
                         if (rowsAffected > 0)
                         {
                             return true;
                         }
                         else
                         {
-                            // No rows were updated, handle accordingly
                             return false;
                         }
                     }
