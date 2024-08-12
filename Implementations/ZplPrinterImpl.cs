@@ -1,27 +1,37 @@
 using XmlToZpl.Processors;
 using XmlToZpl.Utils;
-using XmlToZpl.Interfaces;
 using System.Collections.Generic;
 using System;
+using XmlToZpl.Interfaces;
+
 namespace XmlToZpl.Implementations
 {
-    public class ZplPrinterImpl : IZplPrinter
+    public class ZplPrinterImpl : ZplPrinterBase
     {
-        public bool PrintLabel(string zplFilePath, List<Dictionary<string, string>> data, string printerName)
+        private int dpi;
+        private string printerName;
+
+        public ZplPrinterImpl(int dpi, string printerName)
+        {
+            this.dpi = dpi;
+            this.printerName = printerName;
+        }
+        public override bool PrintLabel(string zplFilePath, List<Dictionary<string, string>> data)
         {
             try
             {
-                ZplTemplateProcessor.ProcessAndPrintZplFile(zplFilePath, data, printerName);
-                return true;
+                return ZplTemplateProcessor.ProcessAndPrintZplFile(zplFilePath, data, this.printerName);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                LoggerUtil.LogError(ex, "ZplPrinterImpl", "PrintLabel");
+
                 return false;
             }
         }
 
-        public bool ConvertXmlToZpl(string xmlFilePath, string zplOutputFile)
+        public override bool ConvertXmlToZpl(string xmlFilePath, string zplOutputFile)
         {
             try
             {
@@ -32,6 +42,7 @@ namespace XmlToZpl.Implementations
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                LoggerUtil.LogError(ex, "ZplPrinterImpl", "ConvertXmlToZpl");
                 return false;
             }
         }

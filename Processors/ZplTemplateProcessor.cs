@@ -8,7 +8,7 @@ namespace XmlToZpl.Processors
 {
     public static class ZplTemplateProcessor
     {
-        public static void ProcessAndPrintZplFile(string templateZplFilePath, List<Dictionary<string, string>> variables, string printerName)
+        public static bool ProcessAndPrintZplFile(string templateZplFilePath, List<Dictionary<string, string>> variables, string printerName)
         {
             //TODO CRAETE A MODEL TO ADD QUANTITY
             string zplTemplate = FileUtil.ReadFile(templateZplFilePath);
@@ -26,14 +26,13 @@ namespace XmlToZpl.Processors
                     finalzpl += zplToPrint;
                     zplToPrint = zplTemplate;
                 }
-                RawPrinterHelper.SendStringToPrinter(printerName, finalzpl);
+                 if(RawPrinterHelper.SendStringToPrinter(printerName, finalzpl))
+                {
+                    return true;
+                }
             }
-            else
-            {
 
-            }
-
-
+            return false;
         }
         public static string MapTemplate(string zplTemplateCode, Dictionary<string, string> mapDictionarry)
         {
