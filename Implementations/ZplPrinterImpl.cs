@@ -36,7 +36,7 @@ namespace XmlToZpl.Implementations
             try
             {
                 string xmlContent = FileUtil.ReadFile(xmlFilePath);
-                string zplCode = XmlToZplConverter.ConvertDynamicXmlToZpl(xmlContent);
+                string zplCode = XmlToZplConverter.ConvertDynamicXmlToZpl(xmlContent, this.dpi);
                 return FileUtil.WriteInFile(zplOutputFile, zplCode);
             }
             catch (Exception ex)

@@ -6,12 +6,11 @@ namespace XmlToZpl.Utils
     public static class PointsConverter
     {
         private const double CmToInch = 0.393701;
-        private const int Dpi = 203;
-        public static int ConvertDimension(string dimensionValue)
+        public static int ConvertDimension(string dimensionValue, int dpi)
         {
             try
             {
-                return (int)(double.TryParse(dimensionValue, NumberStyles.Any, CultureInfo.InvariantCulture, out double val) ? val * CmToInch * Dpi : 0);
+                return (int)(double.TryParse(dimensionValue, NumberStyles.Any, CultureInfo.InvariantCulture, out double val) ? val * CmToInch * dpi : 0);
 
             }
             catch (System.Exception ex)

@@ -19,9 +19,10 @@ namespace XmlToZpl.Utils
         /// and generates corresponding ZPL commands.
         /// </summary>
         /// <param name="xmlFilePath">The path to the XML file containing the data to be converted.</param>
+        /// <param name="dpi">The dpi used (203 or 300).</param>
         /// <returns>A string containing the generated ZPL commands.</returns>
 
-        public static string ConvertDynamicXmlToZpl(string xmlFilePath)
+        public static string ConvertDynamicXmlToZpl(string xmlFilePath, int dpi)
         {
             string xmlContent = FileUtil.ReadFile(xmlFilePath);
             XDocument xml;
@@ -38,11 +39,11 @@ namespace XmlToZpl.Utils
 
             foreach (var item in xml.Root?.Element("Items")?.Elements())
             {
-                int x = PointsConverter.ConvertDimension(item.Attribute("X")?.Value);
-                int y = PointsConverter.ConvertDimension(item.Attribute("Y")?.Value);
-                int width = PointsConverter.ConvertDimension(item.Attribute("Width")?.Value);
-                int height = PointsConverter.ConvertDimension(item.Attribute("Height")?.Value);
-                int strokeThickness = PointsConverter.ConvertDimension(item.Attribute("StrokeThickness")?.Value);
+                int x = PointsConverter.ConvertDimension(item.Attribute("X")?.Value, dpi);
+                int y = PointsConverter.ConvertDimension(item.Attribute("Y")?.Value, dpi);
+                int width = PointsConverter.ConvertDimension(item.Attribute("Width")?.Value, dpi);
+                int height = PointsConverter.ConvertDimension(item.Attribute("Height")?.Value, dpi);
+                int strokeThickness = PointsConverter.ConvertDimension(item.Attribute("StrokeThickness")?.Value, dpi);
 
                 string name = item.Attribute("Name")?.Value;
 
