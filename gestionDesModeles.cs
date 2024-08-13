@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using XmlToZpl.DbHelper;
+using XmlToZpl.Implementations;
+using XmlToZpl.Interfaces;
 
 namespace XmlToZpl
 {
@@ -11,11 +13,16 @@ namespace XmlToZpl
         private string connectionString = "server=localhost\\SQLEXPRESS;database=Inventaire BDD;Trusted_Connection=True;";
         private string selectedLabelFile;
         private Models.Label selectedLabel;
+        private readonly ZplPrinterBase printerBase;
+        private readonly ZplConfigBase configBase;
+
 
         public gestionDesModeles()
         {
             InitializeComponent();
             dbHelper = new DatabaseHelper(connectionString);
+            printerBase = new ZplPrinterImpl();
+            configBase = new ZplConfigImpl();
             StartPosition = FormStartPosition.CenterScreen;
         }
 
@@ -144,7 +151,7 @@ namespace XmlToZpl
 
                     if (result == DialogResult.Yes)
                     {
-                        bool success = dbHelper.DeleteLabelFromDb(selectedLabel);
+                        bool success = configBase.DeleteLabelConfig(selectedLabel);
 
                         if (success)
                         {

@@ -36,6 +36,7 @@ namespace XmlToZpl.Utils
             }
 
             string zplRes = "^XA\n";
+            zplRes += "^CI28^CWZ,E:MICROSS.TTF";
 
             foreach (var item in xml.Root?.Element("Items")?.Elements())
             {
@@ -43,9 +44,10 @@ namespace XmlToZpl.Utils
                 int y = PointsConverter.ConvertDimension(item.Attribute("Y")?.Value, dpi);
                 int width = PointsConverter.ConvertDimension(item.Attribute("Width")?.Value, dpi);
                 int height = PointsConverter.ConvertDimension(item.Attribute("Height")?.Value, dpi);
+                int barHeight = PointsConverter.ConvertDimension(item.Attribute("BarHeight")?.Value, dpi);
                 int strokeThickness = PointsConverter.ConvertDimension(item.Attribute("StrokeThickness")?.Value, dpi);
 
-                string name = item.Attribute("Name")?.Value;
+                string name = item.Attribute("Name")?.Value.Trim();
 
 
                 string fontString = item.Attribute("Font")?.Value;
@@ -69,9 +71,10 @@ namespace XmlToZpl.Utils
                 int baseFontSize = 12;
                 int baseCharWidthInDots = 3;
 
-                var fontSizeScalingFactor = zplFontSize / baseFontSize;
+                double fontSizeScalingFactor = zplFontSize / baseFontSize;
 
-                var adjustedCharWidth = baseCharWidthInDots * fontSizeScalingFactor;
+                double adjustedCharWidth = baseCharWidthInDots * fontSizeScalingFactor;
+
 
                 switch (item.Name.LocalName)
                 {
@@ -99,13 +102,9 @@ namespace XmlToZpl.Utils
                         // }
                         // else
                         // {
-                        if (text != "null")
+                        if (name != "")
                         {
-                            zplRes += "^FO" + x + "," + y + "^A" + "0" + ",N," + zplFontSize + foreColor + "^FD" + text + "^FS";
-                        }
-                        else
-                        {
-                            zplRes += "^FO" + x + "," + y + "^A" + "0" + ",N," + zplFontSize + foreColor + "^FD" + "@" + name + "@" + "^FS";
+                            zplRes += "^FO" + x + "," + y + "^PA0,1,1,1^A" + "Z" + ",N," + zplFontSize + foreColor + "^FD" + "@" + name + "@" + "^FS";
                         }
                         // }
 
@@ -135,31 +134,31 @@ namespace XmlToZpl.Utils
                             case "Code128":
                                 if (code != "")
                                 {
-                                    zplRes += $"^FO{x},{y}^BY3,,{height}^BC{orientation},{height},Y,N,N^FD{code}^FS\n";
+                                    zplRes += $"^FO{x},{y}^BY3,,{barHeight}^BC{orientation},{barHeight},Y,N,N^FD{code}^FS\n";
                                 }
                                 else
                                 {
-                                    zplRes += $"^FO{x},{y}^BY3,,{height}^BC{orientation},{height},Y,N,N^FD@{name}@^FS\n";
+                                    zplRes += $"^FO{x},{y}^BY3,,{barHeight}^BC{orientation},{barHeight},Y,N,N^FD@{name}@^FS\n";
                                 }
                                 break;
                             case "Codabar":
                                 if (code != "")
                                 {
-                                    zplRes += $"^FO{x},{y}^BY3,,{height}^BK{orientation},N,{height},Y,N^FD{code}^FS\n";
+                                    zplRes += $"^FO{x},{y}^BY3,,{barHeight}^BK{orientation},N,{barHeight},Y,N^FD{code}^FS\n";
                                 }
                                 else
                                 {
-                                    zplRes += $"^FO{x},{y}^BY3,,{height}^BK{orientation},N,{height},Y,N^FD@{name}@^FS\n";
+                                    zplRes += $"^FO{x},{y}^BY3,,{barHeight}^BK{orientation},N,{barHeight},Y,N^FD@{name}@^FS\n";
                                 }
                                 break;
                             case "Code11":
-                                zplRes += $"^FO{x},{y}^BY3,,{height}^B1{orientation},N,{height},Y,N^FD@{name}@^FS\n";
+                                zplRes += $"^FO{x},{y}^BY3,,{barHeight}^B1{orientation},N,{barHeight},Y,N^FD@{name}@^FS\n";
                                 break;
                             case "Code93":
-                                zplRes += $"^FO{x},{y}^BY3,,{height}^B9{orientation},N,{height},Y,N^FD@{name}@^FS\n";
+                                zplRes += $"^FO{x},{y}^BY3,,{barHeight}^B9{orientation},N,{barHeight},Y,N^FD@{name}@^FS\n";
                                 break;
                             case "Code39":
-                                zplRes += $"^FO{x},{y}^BY3,,{height}^B3{orientation},N,{height},Y,N^FD@{name}@^FS\n";
+                                zplRes += $"^FO{x},{y}^BY3,,{barHeight}^B3{orientation},N,{barHeight},Y,N^FD@{name}@^FS\n";
                                 break;
                             case "Pdf417":
                                 zplRes += $"^FO{x},{y}^B7{orientation},3,8,0,0,N^FD@{name}@^FS\n";

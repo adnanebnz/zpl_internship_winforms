@@ -1,0 +1,4 @@
+- [ ] delete and trim whitespaces in Name attribute
+- [ ] merge between dynamic and static txts
+- [ ] text dynamic names not showing when they have a static text mean we need to merge
+- [ ] GERER PLUSIEURS IMAGES NOT FOUND

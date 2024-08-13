@@ -4,7 +4,8 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using XmlToZpl.DbHelper;
-using XmlToZpl.Processors;
+using XmlToZpl.Implementations;
+using XmlToZpl.Interfaces;
 using XmlToZpl.Utils;
 
 
@@ -20,10 +21,14 @@ namespace XmlToZpl
         private List<ComboBox> comboBoxes = new List<ComboBox>();
         public string zplResult;
         private string newImageFilePath;
-        private DatabaseHelper dbHelper;
         private string connectionString = "server=localhost\\SQLEXPRESS;database=Inventaire BDD;Trusted_Connection=True;";
         private string labelName = "";
         private List<string> bddValues = new List<string> { };
+        private readonly DatabaseHelper dbHelper;
+        private readonly ZplPrinterBase printerBase;
+        private readonly ZplConfigBase configBase;
+        private readonly ZplMappingBase mappingBase;
+        private readonly ZplConversionBase conversionBase;
 
         public Form1()
         {
@@ -40,6 +45,10 @@ namespace XmlToZpl
             button5.Visible = false;
             label3.Visible = false;
             dbHelper = new DatabaseHelper(connectionString);
+            printerBase = new ZplPrinterImpl(203);
+            mappingBase = new ZplMappingImpl();
+            configBase = new ZplConfigImpl();
+            conversionBase = new ZplCovnversionImpl(203);
             this.StartPosition = FormStartPosition.CenterScreen;
         }
 
@@ -65,59 +74,29 @@ namespace XmlToZpl
                 }
             }
 
-
-            string result = ZplTemplateProcessor.MapTemplate(this.zplResult, this.mappingDictionary);
-
-            // Add mapping variables to XML
-            bool res = ZplTemplateProcessor.AddMappingVariablesToXml(this.xmlFilePath, this.mappingDictionary);
-
-            // Define the directory and ensure it exists
-            string directoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "modeles");
-            if (!Directory.Exists(directoryPath))
-            {
-                Directory.CreateDirectory(directoryPath);
-            }
-
-            // Construct the new file path for the .zpl file
-            string fileName = Path.GetFileNameWithoutExtension(this.xmlFilePath) + ".zpl";
-            string newFilePath = Path.Combine(directoryPath, fileName);
-
-            // Write the result to the new .zpl file
-            FileUtil.WriteInFile(newFilePath, result);
-
-            Console.WriteLine("SAVED FILE");
-            Console.WriteLine(result);
-
-            // Create a new Label instance
-            string labelName = textBox3.Text;
-            Models.Label label = new Models.Label
-            {
-                CheminLabel = Path.Combine(directoryPath, Path.GetFileName(this.xmlFilePath)),
-                CheminZpl = newFilePath,
-                NomLabel = labelName
-            };
-
-            // You might want to perform additional operations with the 'label' object here
-
-            bool registerResult = dbHelper.InsertLabelIntoDb(label);
-            if (String.IsNullOrEmpty(labelName))
+            // WE GET THE ZPL CODE WWITH DYNAMIC VARIABLES TOOK FROM THE NAME ATTRIBUTE (before mapping)
+            string zplRes = conversionBase.GetZplCode(this.xmlFilePath);
+            // MAPPING AND CHANGING THE ZPL VARIABLE WITH THE ONES IN THE DICT
+            string finalZplRes = mappingBase.MapZplTemplate(zplRes, mappingDictionary);
+            // MODIFYING EACH DYNAMIC ELEMENT BY ADDING DbColumnName attribute to the actual value from the mapping
+            bool res = mappingBase.SetDbColsToXml(this.xmlFilePath, this.mappingDictionary);
+            // SAVING THE CONFIG
+            string result = configBase.SaveConfig(xmlFilePath, finalZplRes, textBox3.Text);
+            if (result == "Please insert your config name")
             {
                 MessageBox.Show("Please insert your config name");
             }
-            if (!res)
+            if (result == "Error saving the file")
             {
                 MessageBox.Show("Error saving the file");
             }
-            if (!registerResult)
+            if (result == "Erreur, le nom de la config existe deja")
             {
-                MessageBox.Show("Erreur, le nom de la config existe déja");
+                MessageBox.Show("Erreur, le nom de la config existe deja");
             }
-            else
+            if (result == "success")
             {
-                if (res)
-                {
-                    MessageBox.Show("Xml Config saved!");
-                }
+                MessageBox.Show("Xml Config saved!");
             }
         }
 

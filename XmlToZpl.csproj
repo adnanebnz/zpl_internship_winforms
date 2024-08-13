@@ -68,7 +68,13 @@
     <Compile Include="gestionDesModeles.Designer.cs">
       <DependentUpon>gestionDesModeles.cs</DependentUpon>
     </Compile>
+    <Compile Include="Implementations\ZplConfigImpl.cs" />
+    <Compile Include="Implementations\ZplConversionImpl.cs" />
+    <Compile Include="Implementations\ZplMappingImpl.cs" />
     <Compile Include="Implementations\ZplPrinterImpl.cs" />
+    <Compile Include="Interfaces\ZplConfigBase.cs" />
+    <Compile Include="Interfaces\ZplConversionBase.cs" />
+    <Compile Include="Interfaces\ZplMappingBase.cs" />
     <Compile Include="Interfaces\ZplPrinterBase.cs" />
     <Compile Include="Models\Bien.cs" />
     <Compile Include="Models\Label.cs" />
