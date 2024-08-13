@@ -150,7 +150,7 @@ namespace XmlToZpl
                             pictureBox1.Load(imageFilePath);
                         }
                     }
-                    this.zplResult = XmlToZplConverter.ConvertDynamicXmlToZpl(this.xmlFilePath);
+                    this.zplResult = XmlToZplConverter.ConvertDynamicXmlToZpl(this.xmlFilePath, 203);
 
                     Console.WriteLine(zplResult);
 
@@ -242,7 +242,7 @@ namespace XmlToZpl
                 label2.Visible = false;
                 XmlToZplConverter.ModifyImagePath(this.xmlFilePath, newImageFilePath);
                 pictureBox1.Load(newImageFilePath);
-                this.zplResult = XmlToZplConverter.ConvertDynamicXmlToZpl(this.xmlFilePath);
+                this.zplResult = XmlToZplConverter.ConvertDynamicXmlToZpl(this.xmlFilePath, 203);
                 Console.WriteLine(zplResult);
             }
         }
